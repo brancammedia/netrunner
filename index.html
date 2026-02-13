@@ -177,10 +177,12 @@
     const shell = document.querySelector('.shell');
 
     // Check saved session
+    const allShells = document.querySelectorAll('.shell');
     if (sessionStorage.getItem('netrunner-auth') === 'ok') {
       authGate.style.display = 'none';
+      allShells.forEach(s => s.style.display = '');
     } else {
-      document.querySelector('.shell').style.display = 'none';
+      allShells.forEach(s => s.style.display = 'none');
     }
 
     authInput.addEventListener('keydown', async (e) => {
@@ -189,7 +191,7 @@
         if (hash === ACCESS_HASH) {
           sessionStorage.setItem('netrunner-auth', 'ok');
           authGate.style.display = 'none';
-          document.querySelector('.shell').style.display = '';
+          document.querySelectorAll('.shell').forEach(s => s.style.display = '');
         } else {
           authError.style.opacity = '1';
           authInput.value = '';
@@ -198,7 +200,7 @@
       }
     });
   </script>
-  <div class="shell">
+  <div class="shell" style="display:none">
     <header class="header">
       <div class="brand">
         <span class="live-dot" aria-hidden="true"></span>
