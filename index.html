@@ -166,7 +166,7 @@
   </div>
   <script>
     // SHA-256 hash of password — not plaintext in source
-    const ACCESS_HASH = '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8';
+    const ACCESS_HASH = '10e31a1a787614808db4ab2058dc418225d09a5edfe1dd0001494c523e4ed9ef';
     async function sha256(str) {
       const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
       return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
