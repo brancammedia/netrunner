@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
   <title>Netrunner v2 - AI Operations Command Center</title>
   <style>
     :root {
@@ -152,6 +153,51 @@
   </style>
 </head>
 <body>
+  <!-- PASSWORD GATE -->
+  <div id="authGate" style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0a0a0f;">
+    <div style="text-align:center;font-family:var(--font-mono,'Courier New',monospace);">
+      <div style="font-size:28px;color:#00a19a;margin-bottom:8px;">♜ NETRUNNER</div>
+      <div style="font-size:12px;color:#9aa4b2;margin-bottom:24px;">AUTHENTICATION REQUIRED</div>
+      <input id="authInput" type="password" placeholder="Enter access code" autofocus
+        style="background:#10131b;border:1px solid #273244;color:#e6edf3;padding:12px 20px;font-size:14px;border-radius:8px;width:240px;text-align:center;font-family:inherit;outline:none;"
+        onfocus="this.style.borderColor='#00a19a'" onblur="this.style.borderColor='#273244'">
+      <div id="authError" style="color:#dc2626;font-size:11px;margin-top:10px;opacity:0;">Access denied</div>
+    </div>
+  </div>
+  <script>
+    // SHA-256 hash of password — not plaintext in source
+    const ACCESS_HASH = '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8';
+    async function sha256(str) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+    const authInput = document.getElementById('authInput');
+    const authGate = document.getElementById('authGate');
+    const authError = document.getElementById('authError');
+    const shell = document.querySelector('.shell');
+
+    // Check saved session
+    if (sessionStorage.getItem('netrunner-auth') === 'ok') {
+      authGate.style.display = 'none';
+    } else {
+      document.querySelector('.shell').style.display = 'none';
+    }
+
+    authInput.addEventListener('keydown', async (e) => {
+      if (e.key === 'Enter') {
+        const hash = await sha256(authInput.value);
+        if (hash === ACCESS_HASH) {
+          sessionStorage.setItem('netrunner-auth', 'ok');
+          authGate.style.display = 'none';
+          document.querySelector('.shell').style.display = '';
+        } else {
+          authError.style.opacity = '1';
+          authInput.value = '';
+          setTimeout(() => authError.style.opacity = '0', 2000);
+        }
+      }
+    });
+  </script>
   <div class="shell">
     <header class="header">
       <div class="brand">
