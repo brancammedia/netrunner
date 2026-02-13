@@ -40,6 +40,7 @@
     }
 
     * { box-sizing: border-box; }
+    html, body { overflow-x: hidden; max-width: 100vw; }
 
     body {
       margin: 0;
@@ -141,6 +142,24 @@
 
     .health-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
     @media (max-width:980px) { .health-grid { grid-template-columns: 1fr; } }
+
+    /* Mobile fixes */
+    @media (max-width:600px) {
+      body { overflow-x: hidden; }
+      .shell { padding: 12px 10px 20px; }
+      .header { gap: 8px; }
+      .brand-title { letter-spacing: .08em; }
+      .clock { min-width: unset; font-size: .75rem; padding: 6px 8px; }
+      .controls { gap: 6px; }
+      .controls button { padding: 6px 10px; font-size: .7rem; }
+      table { font-size: .72rem; display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      th, td { padding: 6px 8px; white-space: nowrap; }
+      .agent-card { padding: 14px; }
+      .pane-header { padding: 10px 12px; }
+      .pane-body { padding: 10px 12px; }
+      .project-card { padding: 10px; }
+      .memory-view { font-size: .8rem; }
+    }
     .health-card { border: 1px solid var(--border); border-radius: 10px; background: var(--bg-soft); padding: 10px; display: grid; gap: 5px; }
     .health-row { display: flex; justify-content: space-between; gap: 7px; align-items: center; }
     .health-state.running, .health-state.online, .health-state.active, .health-state.valid { color: var(--ok); }
