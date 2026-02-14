@@ -325,9 +325,9 @@
         icon: "ROOK",
         status: "online",
         model: "claude-opus-4-6",
-        contextUsed: 155000,
+        contextUsed: 148600,
         contextMax: 200000,
-        lastActive: "2026-02-13T17:18:00",
+        lastActive: "2026-02-13T20:48:00",
         host: "WIN-79G2697J611 (WSL2)"
       },
       {
@@ -338,9 +338,9 @@
         model: "claude-opus-4-6",
         contextUsed: 35000,
         contextMax: 200000,
-        lastActive: "2026-02-13T17:15:00",
+        lastActive: "2026-02-13T18:29:00",
         host: "rook-247 (138.197.64.68)",
-        uptime: "2 days 21h"
+        uptime: "2 days 23h"
       },
       {
         id: "scout",
@@ -348,11 +348,23 @@
         icon: "SCOUT",
         status: "idle",
         model: "claude-opus-4-6",
-        contextUsed: 0,
+        contextUsed: 200000,
         contextMax: 200000,
         lastRun: "2026-02-13T08:00:00",
         nextRun: "2026-02-14T07:00:00",
-        summary: "+$246.65 overnight. Scalp 44.7% WR. Regime: RANGING. Session cleared."
+        summary: "Context full — session cleanup scheduled 8:30 AM CST."
+      },
+      {
+        id: "signal-engine",
+        name: "Signal Engine",
+        icon: "SCOUT",
+        status: "online",
+        model: "Node.js (headless)",
+        contextUsed: 0,
+        contextMax: 0,
+        lastActive: "2026-02-13T20:11:00",
+        host: "rook-247 (pm2 · PID 83222)",
+        uptime: "Running 24/7"
       }
     ];
 
@@ -361,17 +373,17 @@
         label: "Desktop Rook DM",
         type: "DM",
         model: "claude-opus-4-6",
-        contextUsed: 155000,
+        contextUsed: 148600,
         contextMax: 200000,
         cost: null,
-        lastMessage: "2026-02-13T17:18:00",
+        lastMessage: "2026-02-13T20:48:00",
         channel: "Telegram"
       },
       {
         label: "Scout — Daily Analysis",
         type: "Sub-agent",
         model: "claude-opus-4-6",
-        contextUsed: 0,
+        contextUsed: 200000,
         contextMax: 200000,
         cost: null,
         lastMessage: "2026-02-13T08:02:00",
@@ -391,38 +403,22 @@
         label: "The Rookies (Group)",
         type: "Group",
         model: "claude-opus-4-6",
-        contextUsed: 40957,
+        contextUsed: 20946,
         contextMax: 200000,
         cost: null,
-        lastMessage: "2026-02-13T13:09:00",
+        lastMessage: "2026-02-13T18:30:00",
         channel: "Telegram"
       }
     ];
 
     const CRON_JOBS = [
       {
-        name: "Scout — Daily Trading Analysis",
-        schedule: "Daily 7:00 AM CST",
+        name: "Trade Log Sync to VPS",
+        schedule: "Daily 6:30 AM CST",
         enabled: true,
-        lastRun: "2026-02-13T07:00:00",
-        lastResult: "success",
-        nextFire: "2026-02-14T07:00:00"
-      },
-      {
-        name: "Black Hole Voting Reminder",
-        schedule: "Wed 4:45 PM CST",
-        enabled: true,
-        lastRun: "2026-02-12T16:45:00",
-        lastResult: "success",
-        nextFire: "2026-02-19T16:45:00"
-      },
-      {
-        name: "Morning Briefing (Cloud Rook)",
-        schedule: "Daily 7:00 AM CST",
-        enabled: false,
-        lastRun: "2026-02-12T07:00:00",
-        lastResult: "success",
-        nextFire: null
+        lastRun: null,
+        lastResult: null,
+        nextFire: "2026-02-14T06:30:00"
       },
       {
         name: "Scout Session Cleanup",
@@ -433,8 +429,24 @@
         nextFire: "2026-02-14T08:30:00"
       },
       {
+        name: "Black Hole Voting Reminder",
+        schedule: "Wed 4:45 PM CST",
+        enabled: true,
+        lastRun: "2026-02-12T16:45:00",
+        lastResult: "success",
+        nextFire: "2026-02-19T16:45:00"
+      },
+      {
+        name: "Signal Engine (pm2)",
+        schedule: "Every 30s (VPS)",
+        enabled: true,
+        lastRun: "2026-02-13T20:11:00",
+        lastResult: "success",
+        nextFire: null
+      },
+      {
         name: "Cloud Rook Session Cleanup",
-        schedule: "Every 6 hours",
+        schedule: "Every 6 hours (VPS)",
         enabled: true,
         lastRun: null,
         lastResult: null,
@@ -507,9 +519,21 @@
       ],
       completed: [
         {
+          name: "Signal Engine (VPS)",
+          status: "live",
+          desc: "Headless Node.js signal generator. 14 strategies, Binance API, pm2 managed. Running 24/7 on VPS.",
+          updated: "2026-02-13"
+        },
+        {
+          name: "Rook HQ (Pixel Office)",
+          status: "live",
+          desc: "GBC-style pixel office with 4 agent characters. Built by Codex, walking system by Rook.",
+          updated: "2026-02-13"
+        },
+        {
           name: "Netrunner v2 Command Center",
           status: "live",
-          desc: "AI ops dashboard. Built by Codex from Rook's spec.",
+          desc: "AI ops dashboard. Built by Codex from Rook's spec. iOS home screen icon added.",
           updated: "2026-02-13"
         },
         {
@@ -562,7 +586,25 @@
         path: "memory/2026-02-13.md",
         size: 3474,
         updated: "2026-02-13T17:18:00",
-        content: "Day 3 — Louisville dashboard: tier restructure, gen inheritance, pallet thresholds. Inventory Notes column. Netrunner v2 built by Codex. Cloud Rook: crash recovery, brain sync via SSH, session cleanup cron. SSH push capability established."
+        content: "Day 3 — Louisville dashboard: tier restructure, gen inheritance, pallet thresholds. Inventory Notes column. Netrunner v2 built by Codex. Cloud Rook: crash recovery, brain sync via SSH, session cleanup cron."
+      },
+      {
+        path: "memory/2026-02-13-evening.md",
+        size: 1719,
+        updated: "2026-02-13T18:37:00",
+        content: "Evening — Cloud Rook brain sync, backup taken, crash recovery, Scout session cleanup cron, Louisville refinements."
+      },
+      {
+        path: "memory/2026-02-13-late.md",
+        size: 1798,
+        updated: "2026-02-13T20:32:00",
+        content: "Signal Engine built (9 files, zero deps, verified on Binance). Netrunner iOS icon. VPS = source of truth for trading data."
+      },
+      {
+        path: "memory/2026-02-13-night.md",
+        size: 3084,
+        updated: "2026-02-13T20:48:00",
+        content: "Signal Engine deployed to VPS via pm2. All 7 Codex findings fixed. Netrunner iOS icon pushed. Macro Knowledge Base started (42 Macro by Darius Dale). Auth = OAuth flat rate."
       },
       {
         path: "memory/louisville-thresholds.md",
@@ -603,11 +645,12 @@
     ];
 
     const SYSTEM_HEALTH = {
-      desktopGateway: { label: "Desktop Gateway", status: "running", details: "Port 18789 · WSL2 · 2 compactions today" },
-      cloudVPS: { label: "Cloud VPS", status: "online", details: "rook-247 · 138.197.64.68 · Brain synced 4:58 PM · 6hr cleanup active" },
+      desktopGateway: { label: "Desktop Gateway", status: "running", details: "Port 18789 · WSL2 · 5+ compactions today · Opus (OAuth flat rate)" },
+      cloudVPS: { label: "Cloud VPS", status: "online", details: "rook-247 · 138.197.64.68 · Signal Engine running (pm2) · poppler-utils installed" },
+      signalEngine: { label: "Signal Engine", status: "running", details: "pm2 managed · PID 83222 · 86MB RAM · Auto-restart on crash · Survives reboot" },
       gcloudAuth: { label: "gcloud Auth", status: "expired", details: "brandon@portorindustry.com — needs gcloud auth login" },
       githubAuth: { label: "GitHub Auth", status: "active", details: "Windows credential-manager via WSL" },
-      anthropicAPI: { label: "Anthropic API", status: "active", details: "claude-opus-4-6 · Desktop + Cloud" },
+      anthropicAPI: { label: "Anthropic API", status: "active", details: "OAuth token (Max Pro) · claude-opus-4-6 · Flat rate — no per-token billing" },
       deployment: { label: "Last GCS Deploy", status: "expired", details: "Blocked — gcloud auth expired" }
     };
 
