@@ -58,7 +58,7 @@
         var(--bg);
     }
 
-    .shell { max-width: 1500px; margin: 0 auto; padding: 20px 18px 28px; }
+    .shell { max-width: 1500px; margin: 0 auto; padding: 20px 18px 28px; overflow-x: hidden; box-sizing: border-box; }
     .header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
     .brand { display: flex; align-items: center; gap: 10px; }
     .brand-title { margin: 0; font-family: var(--font-mono); font-size: clamp(1.15rem, 2.2vw, 1.8rem); letter-spacing: .16em; font-weight: 700; color: var(--accent); text-shadow: 0 0 14px rgba(0,161,154,.45); }
@@ -148,22 +148,41 @@
     .health-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
     @media (max-width:980px) { .health-grid { grid-template-columns: 1fr; } }
 
-    /* Mobile fixes */
-    @media (max-width:600px) {
-      body { overflow-x: hidden; }
-      .shell { padding: 12px 10px 20px; }
-      .header { gap: 8px; }
-      .brand-title { letter-spacing: .08em; }
-      .clock { min-width: unset; font-size: .75rem; padding: 6px 8px; }
-      .controls { gap: 6px; }
-      .controls button { padding: 6px 10px; font-size: .7rem; }
-      table { font-size: .72rem; display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-      th, td { padding: 6px 8px; white-space: nowrap; }
-      .agent-card { padding: 14px; }
-      .pane-header { padding: 10px 12px; }
-      .pane-body { padding: 10px 12px; }
-      .project-card { padding: 10px; }
-      .memory-view { font-size: .8rem; }
+    /* Mobile fixes — comprehensive */
+    @media (max-width:768px) {
+      body { overflow-x: hidden; max-width: 100vw; }
+      .shell { padding: 12px 8px 20px; max-width: 100vw; overflow-x: hidden; box-sizing: border-box; }
+      .header { gap: 6px; flex-wrap: wrap; }
+      .brand-title { letter-spacing: .06em; font-size: .85rem; }
+      .clock { min-width: unset; font-size: .72rem; padding: 5px 7px; }
+      .controls { gap: 4px; }
+      .controls button { padding: 5px 8px; font-size: .68rem; }
+      .grid { grid-template-columns: 1fr !important; }
+      .pane.half { grid-column: span 1 !important; }
+      .pane.wide { grid-column: span 1 !important; }
+      .agent-grid { grid-template-columns: 1fr !important; }
+      .health-grid { grid-template-columns: 1fr !important; }
+      .projects-wrap { grid-template-columns: 1fr !important; }
+      .memory-layout { grid-template-columns: 1fr !important; }
+      table { font-size: .7rem; display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: calc(100vw - 40px); }
+      th, td { padding: 5px 6px; white-space: nowrap; }
+      .agent-card { padding: 12px; }
+      .pane-header { padding: 8px 10px; }
+      .pane-body { padding: 8px 10px; overflow-x: auto; }
+      .pane-title { font-size: .8rem; }
+      .pane-meta { font-size: .68rem; }
+      .project-card { padding: 8px; }
+      .memory-view { font-size: .78rem; padding: 8px; }
+      .memory-list { max-height: 240px; }
+      .bar-label { font-size: .68rem; }
+    }
+    @media (max-width:420px) {
+      .shell { padding: 8px 5px 16px; }
+      .brand-title { font-size: .75rem; }
+      .clock { font-size: .65rem; padding: 4px 6px; }
+      .agent-card { padding: 10px; }
+      table { font-size: .62rem; }
+      th, td { padding: 4px 5px; }
     }
     .health-card { border: 1px solid var(--border); border-radius: 10px; background: var(--bg-soft); padding: 10px; display: grid; gap: 5px; }
     .health-row { display: flex; justify-content: space-between; gap: 7px; align-items: center; }
