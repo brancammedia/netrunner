@@ -903,7 +903,7 @@ const DOMAINS = [
       { id: 'inventory', name: 'Inventory Dashboard', status: 'live', description: 'Live inventory viewer across warehouses', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/inventory/index.html' },
       { id: 'clearance', name: 'Clearance Stock', status: 'live', description: 'Clearance and overstock management', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/clearance-stock/index.html' },
       { id: 'incoming-orders', name: 'Incoming Orders & Shipments', status: 'live', description: 'Track incoming POs and shipments', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Incoming%20Orders%20and%20Shipments/index.html' },
-      { id: 'louisville', name: 'Louisville Replenishment', status: 'live', description: 'Ontario→Louisville transfer management', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Louisville%20Replenishment/index.html' },
+      { id: 'louisville', name: 'Louisville Replenishment', status: 'live', description: 'Ontario→Louisville transfer management', agents: [], cronJobs: [], workflows: [], tasks: ['Audit categorizations for misclassified SKUs','Set minimum thresholds & reorder quantities per SKU','Import monthly run rate data'], notes: '', lastUpdated: '2026-02-16', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Louisville%20Replenishment/index.html' },
       { id: 'support', name: 'Support', status: 'live', description: 'Support resources portal', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Support/index.html' },
       { id: 'cloud-functions', name: 'Cloud Functions (Backend)', status: 'live', description: 'GCP Cloud Functions powering all tools', agents: ['desktop-rook'], cronJobs: [], workflows: [], tasks: [], notes: 'Never push without Brandon approval', lastUpdated: '2026-02-15' },
       { id: 'rep-hubs', name: 'Rep Hubs', status: 'paused', description: 'Rep agency index and hubs', agents: ['desktop-rook'], cronJobs: [], workflows: [], tasks: [], notes: 'Index file built, paused', lastUpdated: '2026-02-10' },
@@ -1400,7 +1400,7 @@ function renderOverview() {
   <div class="card" style="padding:16px">
     <div style="display:flex;flex-direction:column;gap:10px">
       ${[
-        { num: 1, name: 'Portor Inventory Tool', domain: '🏭', note: 'Close to done — iterate to finish', color: 'var(--red)' },
+        { num: 1, name: 'Portor Inventory Tool', domain: '🏭', note: 'Fine-tune categories, set min thresholds & reorder qty, import monthly run rate', color: 'var(--red)' },
         { num: 2, name: 'Portor Remotion Marketing Video', domain: '🏭', note: 'Marketing video build', color: 'var(--red)' },
         { num: 3, name: 'Portor Cross Tool', domain: '🏭', note: 'Back to planning → kick off data mining', color: 'var(--amber)' },
         { num: 4, name: 'Trading Engine', domain: '📈', note: 'Dial in Desktop/Cloud workflow', color: 'var(--amber)' },
