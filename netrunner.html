@@ -1704,53 +1704,62 @@ function deleteTask(pid, idx) {
 // RENDER: AGENTS
 // ============================================================
 
+let expandedAgent = null;
+function toggleAgent(id) { expandedAgent = expandedAgent === id ? null : id; renderAgents(); }
+
 function renderAgents() {
-  let html = '';
+  let html = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px">';
   AGENTS.forEach(a => {
     const pct = Math.round((a.context.used / a.context.max) * 100);
     const barClass = pct > 80 ? 'danger' : pct > 50 ? 'warn' : '';
     const assignedProjects = allProjects().filter(p => p.agents.includes(a.id));
     const assignedWorkflows = getAllWorkflows().filter(w => w.agent === a.id);
+    const isExpanded = expandedAgent === a.id;
 
     html += `
-    <div class="card" style="margin-bottom:16px">
-      <div class="agent-header">
-        <span class="agent-icon" style="font-size:2rem">${a.icon}</span>
-        <div>
-          <div class="agent-name" style="font-size:1.1rem">${a.name}</div>
-          <div style="margin-top:2px">${statusBadge(a.status)}</div>
+    <div class="project-card ${isExpanded ? 'expanded' : ''}" id="agent-${a.id}">
+      <div class="project-card-top" onclick="toggleAgent('${a.id}')">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:1.3rem">${a.icon}</span>
+          <span class="project-name">${a.name}</span>
+          ${statusBadge(a.status)}
         </div>
+        <span style="color:var(--text-muted);font-size:0.7rem">${isExpanded ? '▼' : '▶'}</span>
       </div>
-      <div class="grid-2" style="margin-top:16px">
-        <div>
-          <div class="agent-meta">
-            <div class="agent-meta-row"><span class="agent-meta-key">Model</span><span class="agent-meta-val">${a.model}</span></div>
-            <div class="agent-meta-row"><span class="agent-meta-key">Host</span><span class="agent-meta-val">${a.host}</span></div>
-            <div class="agent-meta-row"><span class="agent-meta-key">Version</span><span class="agent-meta-val">${a.version || 'unknown'}</span></div>
-            ${a.schedule ? `<div class="agent-meta-row"><span class="agent-meta-key">Schedule</span><span class="agent-meta-val">${a.schedule}</span></div>` : ''}
-            ${a.extra ? `<div class="agent-meta-row"><span class="agent-meta-key">Note</span><span class="agent-meta-val">${a.extra}</span></div>` : ''}
-          </div>
-          <div style="margin-top:12px">
-            <div class="agent-meta-key" style="margin-bottom:4px">Context Usage — ${pct}%</div>
-            <div class="progress-bar"><div class="progress-fill ${barClass}" style="width:${pct}%"></div></div>
-          </div>
+      <div class="project-desc">${a.model} · ${a.host}</div>
+      <div style="margin-top:4px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+          <span class="agent-meta-key">Context</span>
+          <span style="font-size:0.7rem;color:var(--text-dim)">${pct}%</span>
         </div>
-        <div>
-          <div class="project-section-title">Assigned Projects (${assignedProjects.length})</div>
-          ${assignedProjects.length ? assignedProjects.map(p => `
-            <div style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:0.82rem;cursor:pointer" onclick="switchTab('projects')">
+        <div class="progress-bar"><div class="progress-fill ${barClass}" style="width:${pct}%"></div></div>
+      </div>
+      <div style="margin-top:8px;display:flex;gap:12px;flex-wrap:wrap">
+        <span class="project-meta-item"><strong>${assignedProjects.length}</strong> projects</span>
+        <span class="project-meta-item"><strong>${assignedWorkflows.length}</strong> workflows</span>
+        ${a.schedule ? `<span class="project-meta-item">⏲ ${a.schedule}</span>` : ''}
+      </div>
+      <div class="project-detail">
+        <div class="agent-meta" style="margin-bottom:12px">
+          <div class="agent-meta-row"><span class="agent-meta-key">Version</span><span class="agent-meta-val">${a.version || 'unknown'}</span></div>
+          ${a.extra ? `<div class="agent-meta-row"><span class="agent-meta-key">Note</span><span class="agent-meta-val">${a.extra}</span></div>` : ''}
+        </div>
+        ${assignedProjects.length ? `
+          <div class="project-section-title">Projects</div>
+          ${assignedProjects.map(p => `
+            <div style="display:flex;align-items:center;gap:8px;padding:3px 0;font-size:0.82rem;cursor:pointer" onclick="switchTab('projects')">
               ${statusEmoji(p.status)} ${p.name} ${statusBadge(p.status)}
             </div>
-          `).join('') : '<div style="color:var(--text-muted);font-size:0.82rem">None assigned</div>'}
-
-          ${assignedWorkflows.length ? `
-            <div class="project-section-title" style="margin-top:12px">Workflows (${assignedWorkflows.length})</div>
-            ${assignedWorkflows.map(w => `<div style="font-size:0.82rem;padding:2px 0;color:var(--text-dim);cursor:pointer" onclick="switchTab('workflows')">⏲ ${w.name} <span style="color:var(--text-muted);font-size:0.7rem">— ${w.projectName}</span></div>`).join('')}
-          ` : ''}
-        </div>
+          `).join('')}
+        ` : ''}
+        ${assignedWorkflows.length ? `
+          <div class="project-section-title" style="margin-top:10px">Workflows</div>
+          ${assignedWorkflows.map(w => `<div style="font-size:0.82rem;padding:2px 0;color:var(--text-dim);cursor:pointer" onclick="switchTab('workflows')">⏲ ${w.name} <span style="color:var(--text-muted);font-size:0.7rem">— ${w.projectName}</span></div>`).join('')}
+        ` : ''}
       </div>
     </div>`;
   });
+  html += '</div>';
   document.getElementById('tab-agents').innerHTML = html;
 }
 
