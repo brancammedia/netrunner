@@ -1,0 +1,1965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NETRUNNER v3 — AI Operations Command Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0a0a0f;
+  --bg-card: #0f0f18;
+  --bg-card-hover: #141420;
+  --bg-input: #12121e;
+  --border: #1a1a2e;
+  --border-light: #252540;
+  --teal: #00a19a;
+  --teal-dim: #007a75;
+  --teal-glow: rgba(0,161,154,0.15);
+  --green: #059669;
+  --green-dim: rgba(5,150,105,0.15);
+  --red: #dc2626;
+  --red-dim: rgba(220,38,38,0.15);
+  --amber: #d97706;
+  --amber-dim: rgba(217,119,6,0.15);
+  --purple: #7c3aed;
+  --purple-dim: rgba(124,58,237,0.15);
+  --blue: #3b82f6;
+  --blue-dim: rgba(59,130,246,0.15);
+  --cyan: #06b6d4;
+  --cyan-dim: rgba(6,182,212,0.15);
+  --pink: #ec4899;
+  --pink-dim: rgba(236,72,153,0.15);
+  --slate: #64748b;
+  --slate-dim: rgba(100,116,139,0.15);
+  --text: #e2e8f0;
+  --text-dim: #64748b;
+  --text-muted: #475569;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  --font-sans: 'Outfit', 'Inter', system-ui, sans-serif;
+}
+
+.theme-light {
+  --bg: #f1f5f9;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f8fafc;
+  --bg-input: #f1f5f9;
+  --border: #e2e8f0;
+  --border-light: #cbd5e1;
+  --text: #1e293b;
+  --text-dim: #64748b;
+  --text-muted: #94a3b8;
+  --teal-glow: rgba(0,161,154,0.08);
+}
+
+html { font-size: 16px; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* === HEADER === */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: 52px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-card);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-left { display: flex; align-items: center; gap: 16px; }
+.logo {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 3px;
+  color: var(--teal);
+  text-transform: uppercase;
+}
+.logo span { color: var(--text-dim); font-weight: 400; font-size: 0.75rem; letter-spacing: 1px; margin-left: 8px; }
+.header-right { display: flex; align-items: center; gap: 16px; font-family: var(--font-mono); font-size: 0.8rem; }
+.clock { color: var(--text-dim); }
+.conn-status { display: flex; align-items: center; gap: 6px; color: var(--text-dim); font-size: 0.75rem; }
+.conn-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--red);
+  transition: background 0.3s;
+}
+.conn-dot.connected { background: var(--green); animation: pulse 2s infinite; }
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(5,150,105,0.4); }
+  50% { box-shadow: 0 0 0 4px rgba(5,150,105,0); }
+}
+
+/* === NAV TABS === */
+.nav {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-card);
+  padding: 0 24px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.nav-tab {
+  padding: 10px 20px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+  user-select: none;
+}
+.nav-tab:hover { color: var(--text); background: var(--teal-glow); }
+.nav-tab.active { color: var(--teal); border-bottom-color: var(--teal); }
+.nav-tab .tab-key {
+  display: inline-block;
+  font-size: 0.6rem;
+  background: var(--border);
+  color: var(--text-dim);
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+/* === MAIN CONTENT === */
+.main { padding: 20px 24px; max-width: 1440px; margin: 0 auto; }
+.tab-content { display: none; animation: fadeIn 0.2s ease; }
+.tab-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* === CARDS === */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  transition: border-color 0.2s;
+}
+.card:hover { border-color: var(--border-light); }
+.card-title {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+}
+
+/* === GRIDS === */
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.grid-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+
+/* === STAT CARDS === */
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+.stat-value {
+  font-family: var(--font-mono);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--teal);
+}
+.stat-label {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 2px;
+}
+
+/* === STATUS BADGES === */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.badge-live { background: var(--green-dim); color: var(--green); }
+.badge-active { background: var(--blue-dim); color: var(--blue); }
+.badge-building { background: var(--cyan-dim); color: var(--cyan); }
+.badge-testing { background: var(--purple-dim); color: var(--purple); }
+.badge-concept { background: var(--pink-dim); color: var(--pink); }
+.badge-planned { background: var(--amber-dim); color: var(--amber); }
+.badge-queued { background: var(--slate-dim); color: var(--slate); }
+.badge-paused { background: rgba(100,116,139,0.15); color: var(--text-dim); }
+.badge-maintenance { background: var(--amber-dim); color: var(--amber); }
+.badge-built { background: var(--blue-dim); color: var(--blue); }
+.badge-online { background: var(--green-dim); color: var(--green); }
+.badge-offline { background: var(--red-dim); color: var(--red); }
+.badge-idle { background: rgba(100,116,139,0.15); color: var(--text-dim); }
+.badge-eligible { background: var(--green-dim); color: var(--green); }
+.badge-blocked { background: var(--red-dim); color: var(--red); }
+
+/* === PROGRESS BAR === */
+.progress-bar {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--teal);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+.progress-fill.warn { background: var(--amber); }
+.progress-fill.danger { background: var(--red); }
+
+/* === AGENT CARDS === */
+.agent-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+}
+.agent-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.agent-icon { font-size: 1.5rem; }
+.agent-name { font-family: var(--font-mono); font-weight: 600; font-size: 1rem; }
+.agent-meta { font-size: 0.78rem; color: var(--text-dim); }
+.agent-meta-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid var(--border); }
+.agent-meta-row:last-child { border-bottom: none; }
+.agent-meta-key { color: var(--text-muted); font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.agent-meta-val { color: var(--text); font-family: var(--font-mono); font-size: 0.78rem; }
+
+/* === DOMAIN / PROJECTS === */
+.domains-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.domain-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+}
+.card-action-btn {
+  display: block;
+  width: 100%;
+  margin-top: auto;
+  padding: 10px 0;
+  background: transparent;
+  border: 1px solid var(--teal-dim);
+  border-radius: 6px;
+  color: var(--teal);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+.card-action-btn:hover {
+  background: var(--teal);
+  color: #fff;
+  border-color: var(--teal);
+  box-shadow: 0 0 16px rgba(19, 168, 158, 0.3);
+}
+.domain-card:hover { border-color: var(--teal-dim); background: var(--bg-card-hover); }
+.domain-card.active { border-color: var(--teal); box-shadow: 0 0 12px var(--teal-glow); }
+.domain-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.domain-icon { font-size: 1.8rem; }
+.domain-name {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--text);
+}
+.domain-stats { display: flex; gap: 16px; margin-top: 8px; }
+.domain-stat { display: flex; flex-direction: column; align-items: center; }
+.domain-stat-val { font-family: var(--font-mono); font-weight: 700; font-size: 1.2rem; color: var(--teal); }
+.domain-stat-lbl { font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.domain-meta-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid var(--border); }
+.domain-meta-row:last-child { border-bottom: none; }
+.domain-meta-key { color: var(--text-muted); font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.domain-meta-val { color: var(--text); font-family: var(--font-mono); font-size: 0.78rem; }
+
+.domain-expanded { margin-bottom: 24px; }
+.domain-expanded-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 0;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+}
+.domain-expanded-header:hover { opacity: 0.85; }
+.domain-back { color: var(--teal); font-family: var(--font-mono); font-size: 0.8rem; font-weight: 600; }
+.domain-expanded-name {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+.domain-expanded-count { color: var(--text-dim); font-size: 0.75rem; font-family: var(--font-mono); margin-left: auto; }
+.domain-projects { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.project-card.expanded { grid-column: 1 / -1; }
+
+.project-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+.project-card:hover { border-color: var(--teal-dim); background: var(--bg-card-hover); }
+.project-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; cursor: pointer; }
+.project-name { font-family: var(--font-mono); font-weight: 600; font-size: 0.9rem; }
+.project-desc { color: var(--text-dim); font-size: 0.82rem; margin-bottom: 8px; }
+.project-meta { display: flex; gap: 16px; flex-wrap: wrap; }
+.project-meta-item { font-size: 0.72rem; color: var(--text-muted); }
+.project-meta-item strong { color: var(--text-dim); }
+
+.project-detail { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); display: none; }
+.project-card.expanded .project-detail { display: block; }
+
+.project-section { margin-bottom: 12px; }
+.project-section-title {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+/* Workflow inside project card */
+.workflow-embed {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+}
+.workflow-embed-name {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.8rem;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.workflow-embed-meta {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  padding-left: 20px;
+}
+.workflow-embed-meta div { padding: 1px 0; }
+.workflow-no {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-style: italic;
+}
+
+/* Tasks */
+.task-list { list-style: none; }
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 0.82rem;
+}
+.task-checkbox {
+  width: 16px; height: 16px;
+  border: 1px solid var(--border-light);
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s;
+  background: var(--bg-input);
+}
+.task-checkbox.checked { background: var(--teal); border-color: var(--teal); }
+.task-checkbox.checked::after { content: '✓'; font-size: 0.6rem; color: #fff; }
+.task-text { flex: 1; }
+.task-text.done { text-decoration: line-through; color: var(--text-muted); }
+.task-priority {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  padding: 1px 5px;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+.task-priority.high { background: var(--red-dim); color: var(--red); }
+.task-priority.med { background: var(--amber-dim); color: var(--amber); }
+.task-add {
+  display: flex; gap: 8px; margin-top: 8px;
+}
+.task-add input {
+  flex: 1;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 10px;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  outline: none;
+}
+.task-add input:focus { border-color: var(--teal); }
+.task-add button, .btn {
+  background: var(--teal);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  transition: opacity 0.15s;
+}
+.btn:hover, .task-add button:hover { opacity: 0.85; }
+.btn-sm { padding: 3px 8px; font-size: 0.68rem; }
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+.btn-ghost:hover { border-color: var(--teal); color: var(--teal); }
+
+/* Notes */
+.notes-area {
+  width: 100%;
+  min-height: 60px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 8px 10px;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  resize: vertical;
+  outline: none;
+}
+.notes-area:focus { border-color: var(--teal); }
+
+/* === STATUS SELECT === */
+.status-select {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 3px 8px;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  outline: none;
+  cursor: pointer;
+}
+
+/* === TIMELINE === */
+.timeline { position: relative; padding-left: 40px; }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 18px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--border);
+}
+.timeline-item { position: relative; padding: 12px 0; }
+.timeline-dot {
+  position: absolute;
+  left: -28px;
+  top: 16px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--teal);
+  background: var(--bg);
+}
+.timeline-dot.completed { background: var(--green); border-color: var(--green); }
+.timeline-dot.pending { background: var(--amber); border-color: var(--amber); }
+.timeline-dot.failed { background: var(--red); border-color: var(--red); }
+.timeline-time {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.timeline-event-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px;
+}
+.timeline-event-name {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+.timeline-event-meta { font-size: 0.75rem; color: var(--text-dim); }
+.timeline-dep-arrow {
+  position: absolute;
+  left: -22px;
+  top: 28px;
+  bottom: -12px;
+  width: 2px;
+  border-left: 2px dashed var(--teal-dim);
+}
+.timeline-agent-tag {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.tag-desktop { background: var(--teal-glow); color: var(--teal); }
+.tag-cloud { background: var(--purple-dim); color: var(--purple); }
+.tag-scout { background: var(--green-dim); color: var(--green); }
+
+/* Project tag in workflows */
+.workflow-project-tag {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  background: var(--teal-glow);
+  color: var(--teal);
+  cursor: pointer;
+}
+
+/* Weekly grid */
+.weekly-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-top: 16px;
+}
+.weekly-day {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px;
+  min-height: 120px;
+}
+.weekly-day-name {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+  text-align: center;
+}
+.weekly-event {
+  font-size: 0.68rem;
+  padding: 3px 6px;
+  margin-bottom: 4px;
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* === ACTIVITY FEED === */
+.feed-item {
+  display: flex;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.82rem;
+}
+.feed-item:last-child { border-bottom: none; }
+.feed-time {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  min-width: 65px;
+}
+.feed-text { color: var(--text-dim); }
+
+/* === TODAY TIMELINE === */
+.today-timeline {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow-x: auto;
+  padding: 8px 0;
+}
+.today-event {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.today-event.completed { border-color: var(--green); }
+.today-event.pending { border-color: var(--amber); }
+.today-event.failed { border-color: var(--red); }
+.today-arrow { color: var(--text-muted); font-size: 0.8rem; flex-shrink: 0; }
+
+/* === CONFIG/MEMORY VIEWER === */
+.file-viewer {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+.file-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: var(--bg-input);
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  user-select: none;
+}
+.file-name {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: var(--teal);
+}
+.file-meta { font-size: 0.72rem; color: var(--text-muted); }
+.file-content {
+  padding: 16px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: var(--text-dim);
+  white-space: pre-wrap;
+  word-break: break-word;
+  display: none;
+  max-height: 500px;
+  overflow-y: auto;
+}
+.file-viewer.open .file-content { display: block; }
+
+/* === SKILLS === */
+.skill-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+}
+.skill-name { font-family: var(--font-mono); font-weight: 600; font-size: 0.85rem; margin-bottom: 4px; }
+.skill-desc { font-size: 0.78rem; color: var(--text-dim); margin-bottom: 8px; }
+
+/* === SEARCH === */
+.search-bar {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 14px;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  outline: none;
+  margin-bottom: 16px;
+}
+.search-bar:focus { border-color: var(--teal); }
+
+/* === FILTER BAR === */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.filter-btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: all 0.15s;
+}
+.filter-btn:hover, .filter-btn.active { border-color: var(--teal); color: var(--teal); background: var(--teal-glow); }
+
+/* === TOGGLE VIEWS === */
+.view-toggle { display: flex; gap: 0; margin-bottom: 16px; }
+.view-btn {
+  padding: 6px 16px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.view-btn:first-child { border-radius: 4px 0 0 4px; }
+.view-btn:last-child { border-radius: 0 4px 4px 0; }
+.view-btn.active { background: var(--teal); color: #fff; border-color: var(--teal); }
+
+/* === SECTION TITLES === */
+.section-title {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+  margin-top: 24px;
+}
+.section-title:first-child { margin-top: 0; }
+
+/* === SCROLLBAR === */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* === RESPONSIVE === */
+@media (max-width: 1024px) {
+  .grid-6 { grid-template-columns: repeat(3, 1fr); }
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .weekly-grid { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 768px) {
+  .main { padding: 12px; }
+  .header { padding: 0 12px; }
+  .nav { padding: 0 12px; }
+  .grid-6, .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+  .weekly-grid { grid-template-columns: repeat(2, 1fr); }
+  .nav-tab .tab-key { display: none; }
+  .nav-tab { padding: 8px 12px; font-size: 0.7rem; }
+}
+@media (max-width: 480px) {
+  .weekly-grid { grid-template-columns: 1fr; }
+  .today-timeline { flex-direction: column; align-items: stretch; }
+  .today-arrow { transform: rotate(90deg); text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-left">
+    <div class="logo">NETRUNNER<span>v3</span></div>
+  </div>
+  <div class="header-right">
+    <div class="conn-status">
+      <div class="conn-dot" id="connDot"></div>
+      <span id="connLabel">disconnected</span>
+    </div>
+    <div class="clock" id="clock">--:--:--</div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-tab active" data-tab="overview"><span class="tab-key">1</span>Overview</div>
+  <div class="nav-tab" data-tab="projects"><span class="tab-key">2</span>Projects</div>
+  <div class="nav-tab" data-tab="agents"><span class="tab-key">3</span>Agents</div>
+  <div class="nav-tab" data-tab="workflows"><span class="tab-key">4</span>Workflows</div>
+  <div class="nav-tab" data-tab="skills"><span class="tab-key">5</span>Skills</div>
+  <div class="nav-tab" data-tab="memory"><span class="tab-key">6</span>Memory</div>
+  <div class="nav-tab" data-tab="config"><span class="tab-key">7</span>Config</div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+  <div id="tab-overview" class="tab-content active"></div>
+  <div id="tab-projects" class="tab-content"></div>
+  <div id="tab-agents" class="tab-content"></div>
+  <div id="tab-workflows" class="tab-content"></div>
+  <div id="tab-skills" class="tab-content"></div>
+  <div id="tab-memory" class="tab-content"></div>
+  <div id="tab-config" class="tab-content"></div>
+</div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+
+const GATEWAY_TOKEN = 'b9f15332815cdc8735b20bce7969f8636c743a2a86717152';
+const WS_URL = 'ws://localhost:18789';
+
+const STATUS_CONFIG = {
+  live:        { emoji: '🟢', label: 'Live',        badge: 'badge-live' },
+  active:      { emoji: '🔵', label: 'Active',      badge: 'badge-active' },
+  building:    { emoji: '🔨', label: 'Building',    badge: 'badge-building' },
+  testing:     { emoji: '🧪', label: 'Testing',     badge: 'badge-testing' },
+  concept:     { emoji: '💡', label: 'Concept',     badge: 'badge-concept' },
+  planned:     { emoji: '📋', label: 'Planned',     badge: 'badge-planned' },
+  queued:      { emoji: '⏳', label: 'Queued',      badge: 'badge-queued' },
+  paused:      { emoji: '⏸️', label: 'Paused',      badge: 'badge-paused' },
+  maintenance: { emoji: '🔧', label: 'Maintenance', badge: 'badge-maintenance' },
+  built:       { emoji: '✅', label: 'Built',       badge: 'badge-built' },
+};
+const ALL_STATUSES = Object.keys(STATUS_CONFIG);
+
+const AGENTS = [
+  {
+    id: 'desktop-rook',
+    name: 'Desktop Rook',
+    icon: '♜',
+    model: 'claude-opus-4-6',
+    host: 'WIN-79G2697J611 (WSL2)',
+    version: '2026.2.14',
+    status: 'online',
+    context: { used: 45000, max: 200000 },
+  },
+  {
+    id: 'cloud-rook',
+    name: 'Cloud Rook',
+    icon: '♜',
+    model: 'claude-sonnet-4-20250514',
+    host: '138.197.64.68 (DigitalOcean)',
+    version: 'unknown',
+    status: 'online',
+    context: { used: 12000, max: 200000 },
+    extra: 'VPS — needs OpenClaw update',
+  },
+  {
+    id: 'scout',
+    name: 'Scout',
+    icon: '♟️',
+    model: 'claude-sonnet-4-20250514',
+    host: 'VPS sub-agent',
+    schedule: 'Daily 8 AM CST',
+    status: 'idle',
+    context: { used: 0, max: 200000 },
+  }
+];
+
+const DOMAINS = [
+  {
+    id: 'portor',
+    name: 'Portor Lighting',
+    icon: '💡',
+    projects: [
+      { id: 'portor-homepage', name: 'Main HomePage', status: 'live', description: 'Portal landing page', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Main%20HomePage/index.html' },
+      { id: 'pricing-main', name: 'Pricing Main with Inventory', status: 'live', description: 'Primary pricing portal with live inventory', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/pricing%20main%20with%20inventory/index.html' },
+      { id: 'pricing-dist', name: 'Pricing - Distribution', status: 'live', description: 'Distribution-specific pricing portal', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Pricing%20-%20Distribution/index.html' },
+      { id: 'pole-pricing-main', name: 'Pole Pricing Main', status: 'live', description: 'Pole product pricing portal', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Pole%20Pricing%20Main/index.html' },
+      { id: 'pole-pricing-dist', name: 'Pole Pricing - Distribution', status: 'live', description: 'Distribution pole pricing', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Pole%20Pricing%20-%20Distribution/index.html' },
+      { id: 'quick-hub', name: 'Quick Hub', status: 'live', description: 'Quick reference product hub', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Quick%20Hub/index.html' },
+      { id: 'quick-hub-dist', name: 'Quick Hub Distribution', status: 'live', description: 'Distribution quick hub', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Quick%20Hub%20Distribution/index.html' },
+      { id: 'inventory', name: 'Inventory Dashboard', status: 'live', description: 'Live inventory viewer across warehouses', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/inventory/index.html' },
+      { id: 'clearance', name: 'Clearance Stock', status: 'live', description: 'Clearance and overstock management', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/clearance-stock/index.html' },
+      { id: 'incoming-orders', name: 'Incoming Orders & Shipments', status: 'live', description: 'Track incoming POs and shipments', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Incoming%20Orders%20and%20Shipments/index.html' },
+      { id: 'louisville', name: 'Louisville Replenishment', status: 'live', description: 'Ontario→Louisville transfer management', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Louisville%20Replenishment/index.html' },
+      { id: 'support', name: 'Support', status: 'live', description: 'Support resources portal', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Support/index.html' },
+      { id: 'cloud-functions', name: 'Cloud Functions (Backend)', status: 'live', description: 'GCP Cloud Functions powering all tools', agents: ['desktop-rook'], cronJobs: [], workflows: [], tasks: [], notes: 'Never push without Brandon approval', lastUpdated: '2026-02-15' },
+      { id: 'rep-hubs', name: 'Rep Hubs', status: 'paused', description: 'Rep agency index and hubs', agents: ['desktop-rook'], cronJobs: [], workflows: [], tasks: [], notes: 'Index file built, paused', lastUpdated: '2026-02-10' },
+      { id: 'crossing-tool', name: 'Crossing Tool', status: 'building', description: 'Product cross-reference tool — ground-up rebuild', agents: ['desktop-rook'], cronJobs: [], workflows: [], tasks: [{ text: 'Data mining phase planning', done: false, priority: 'high' }, { text: 'AI backend architecture', done: false, priority: 'high' }], notes: 'Needs ground-up re-plan with AI backend', lastUpdated: '2026-02-14', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Crossing%20Tool/index.html' },
+      { id: 'gen-guide', name: 'Generation Guide', status: 'testing', description: 'Product generation/lineup guide tool', agents: ['desktop-rook'], cronJobs: [], workflows: [], tasks: [{ text: 'Waiting on Brandon feedback', done: false }], notes: 'In testing', lastUpdated: '2026-02-14', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Generation%20Guide/index.html' },
+      // Homepage Redesign — ABORTED Feb 16
+      { id: 'inventory-mgmt', name: 'Inventory Management Tool', status: 'building', description: 'Flag low stock, prioritize by market importance', agents: ['desktop-rook'], cronJobs: [], workflows: [], tasks: [{ text: 'Build low-stock flagging', done: false, priority: 'high' }], notes: 'Currently being built', lastUpdated: '2026-02-15' },
+    ]
+  },
+  {
+    id: 'trading-crypto',
+    name: 'Trading & Crypto',
+    icon: '📈',
+    projects: [
+      {
+        id: 'btc-signal-intel',
+        name: 'BTC Signal Intelligence',
+        status: 'live',
+        description: 'Data collection, strategy development, and signal generation pipeline for BTC trading',
+        agents: ['desktop-rook', 'cloud-rook', 'scout'],
+        cronJobs: ['Pull Scout Report'],
+        workflows: [
+          { name: 'Scout Daily Analysis', schedule: 'Daily 8:00 AM', agent: 'cloud-rook', output: 'Trade report + recommendations', dependsOn: null, lastRun: 'Feb 15 8:00 AM', lastStatus: 'completed' },
+          { name: 'Pull Scout Report', schedule: 'Daily 8:30 AM', agent: 'desktop-rook', output: 'Local copy + Telegram summary', dependsOn: 'Scout Daily Analysis', lastRun: 'Feb 15 8:30 AM', lastStatus: 'completed' },
+        ],
+        tasks: [
+          { text: 'Build regime detection (ADX + EMA slope)', done: false, priority: 'high' },
+          { text: 'RSI Divergence confidence bump 66→69', done: true },
+          { text: 'Bollinger Squeeze removal', done: true },
+        ],
+        notes: 'Components: Scalp Lab (strategy dev + backtesting), Signal Engine (live signals on VPS, 14 strategies × 4 timeframes), BTC Signal Desk (dashboard), Scout (daily analysis sub-agent). Regime detection queued for Codex review. Scout auto-approval workflow active.',
+        lastUpdated: '2026-02-15',
+        link: 'file:///C:/Users/owner/Desktop/Personal%20Projects/Trading-Crypto/Trading%20Analyst/index.html',
+      },
+      {
+        id: 'trading-bot',
+        name: 'Trading Bot',
+        status: 'building',
+        description: 'Automated trade execution — consumes BTC Signal Intelligence output',
+        agents: ['desktop-rook'],
+        cronJobs: [],
+        workflows: [],
+        tasks: [
+          { text: 'Copy trading bot builds first', done: false, priority: 'high' },
+          { text: 'Define execution rules from signal data', done: false },
+          { text: 'Risk management parameters', done: false },
+        ],
+        notes: 'Execution layer. Will consume data feed from BTC Signal Intelligence. Connected but separate — data informs, bot executes.',
+        lastUpdated: '2026-02-15',
+      },
+      {
+        id: 'crypto-intel',
+        name: 'Crypto Intel System',
+        status: 'live',
+        description: 'Portfolio price tracking + sentiment analysis for 20 tokens',
+        agents: ['desktop-rook'],
+        cronJobs: ['Morning Crypto Intel', 'Afternoon Crypto Intel'],
+        workflows: [
+          { name: 'Morning Intel', schedule: 'Daily 7:00 AM', agent: 'desktop-rook', output: 'Price report + Telegram summary', dependsOn: null, lastRun: 'Feb 15 7:00 AM', lastStatus: 'completed' },
+          { name: 'Afternoon Intel', schedule: 'Daily 4:00 PM', agent: 'desktop-rook', output: 'Price report + AM comparison', dependsOn: 'Morning Intel', lastRun: 'Feb 14 4:00 PM', lastStatus: 'completed' },
+        ],
+        tasks: [
+          { text: 'Fix xAI sentiment API reliability', done: false, priority: 'med' },
+          { text: 'NT CoinGecko ID returning N/A', done: false, priority: 'low' },
+        ],
+        notes: 'xAI sentiment hanging — running prices-only as fallback',
+        lastUpdated: '2026-02-15',
+        link: 'file:///C:/Users/owner/Desktop/Crypto%20Home/intel-viewer.html',
+      },
+      {
+        id: 'black-nova',
+        name: 'BLACK/NOVA Strategy',
+        status: 'active',
+        description: '3M veBLACK + SuperNova ETH expansion + 40 Acres lending strategy',
+        agents: ['desktop-rook'],
+        cronJobs: ['Black Hole Voting', 'Elevate & UFO Check'],
+        workflows: [
+          { name: 'Black Hole Voting', schedule: 'Wed 4:45 PM', agent: 'desktop-rook', output: 'Telegram reminder', dependsOn: null, lastRun: 'Feb 12 4:45 PM', lastStatus: 'completed' },
+          { name: 'Elevate/UFO Check', schedule: 'Mon 10:00 AM', agent: 'desktop-rook', output: 'Project launch updates', dependsOn: null, lastRun: 'Feb 10 10:00 AM', lastStatus: 'completed' },
+        ],
+        tasks: [
+          { text: 'Wait for NOVA distribution details', done: false, priority: 'high' },
+          { text: 'Monitor 40 Acres NOVA support', done: false },
+        ],
+        notes: 'Existing loan: ~$30K on 1M veBLACK. $10-12K available on remaining 2M. Amended strategy: borrow against NOVA → LP → DCA into blue chips.',
+        lastUpdated: '2026-02-15',
+      },
+      {
+        id: 'lp-education',
+        name: 'LP Education',
+        status: 'built',
+        description: 'Liquidity provisioning study guide for Blackhole/SuperNova',
+        agents: ['desktop-rook'],
+        cronJobs: [],
+        workflows: [],
+        tasks: [{ text: 'Brandon review guide', done: false }],
+        notes: 'Study guide at Crypto Home/lp-study-guide.md',
+        lastUpdated: '2026-02-13',
+      }
+    ]
+  },
+  {
+    id: 'photography',
+    name: 'Photography',
+    icon: '📸',
+    projects: [
+      {
+        id: 'camarie',
+        name: 'Camarie Photography',
+        status: 'queued',
+        description: 'Email automation + SMS campaigns',
+        agents: [],
+        cronJobs: [],
+        workflows: [],
+        tasks: [{ text: 'Plan email automation', done: false }, { text: 'Plan SMS campaigns', done: false }],
+        notes: 'Queued — waiting for bandwidth',
+        lastUpdated: '2026-02-01',
+      }
+    ]
+  },
+  {
+    id: 'rook-ops',
+    name: 'Rook Operations',
+    icon: '♜',
+    projects: [
+      {
+        id: 'netrunner',
+        name: 'Netrunner',
+        status: 'building',
+        description: 'AI Operations Command Center dashboard',
+        agents: ['desktop-rook'],
+        cronJobs: [],
+        workflows: [],
+        tasks: [
+          { text: 'Workflows inside project cards', done: true, priority: 'high' },
+          { text: 'Full Portor tool inventory', done: true },
+          { text: 'Expanded status system', done: true },
+          { text: 'Live API integration', done: false },
+        ],
+        notes: 'v3 build — refinement pass',
+        lastUpdated: '2026-02-15',
+      },
+      {
+        id: 'llm-cost',
+        name: 'LLM Cost Optimization',
+        status: 'planned',
+        description: 'Research cheaper models for routine tasks',
+        agents: ['desktop-rook'],
+        cronJobs: [],
+        workflows: [],
+        tasks: [{ text: 'Benchmark Sonnet vs Opus for sub-agent tasks', done: false }],
+        notes: 'High priority — burning credits on Opus',
+        lastUpdated: '2026-02-14',
+      },
+      {
+        id: 'memory-embedding',
+        name: 'Memory/Embedding Setup',
+        status: 'paused',
+        description: 'Configure embedding API key for semantic memory search',
+        agents: ['desktop-rook'],
+        cronJobs: [],
+        workflows: [],
+        tasks: [{ text: 'Add OpenAI/Google/Voyage key to auth profiles', done: false }],
+        notes: 'Memory search currently disabled — no embedding key',
+        lastUpdated: '2026-02-01',
+      },
+      {
+        id: 'wake-on-lan',
+        name: 'Wake-on-LAN Setup',
+        status: 'queued',
+        description: 'Enable remote PC wake from phone',
+        agents: ['desktop-rook'],
+        cronJobs: [],
+        workflows: [],
+        tasks: [
+          { text: 'Enable WoL in BIOS', done: false },
+          { text: 'Configure Windows network adapter', done: false },
+          { text: 'Install phone app', done: false },
+        ],
+        notes: 'Quick 5-min setup next time at the machine',
+        lastUpdated: '2026-02-10',
+      },
+      {
+        id: 'cloud-rook-maintenance',
+        name: 'Cloud Rook Maintenance',
+        status: 'active',
+        description: 'VPS management, updates, SSH access',
+        agents: ['desktop-rook', 'cloud-rook'],
+        cronJobs: [],
+        workflows: [],
+        tasks: [
+          { text: 'Update OpenClaw on VPS', done: false, priority: 'high' },
+          { text: 'Fix SSH shell access from WSL', done: false },
+        ],
+        notes: 'SFTP works, shell exec hangs on bash -l. Need to fix or set up SSH keys.',
+        lastUpdated: '2026-02-14',
+      }
+    ]
+  },
+  {
+    id: 'power-track',
+    name: 'Power Track',
+    icon: '⚡',
+    projects: [
+      {
+        id: 'power-track-tool',
+        name: 'Power Track Tool',
+        status: 'planned',
+        description: 'Power consumption tracking and analysis — most complex build in the portfolio',
+        agents: [],
+        cronJobs: [],
+        workflows: [],
+        tasks: [],
+        notes: 'Getting its own domain due to scope and complexity. Will need dedicated planning session.',
+        lastUpdated: '2026-02-15',
+      }
+    ]
+  },
+  {
+    id: 'aimed',
+    name: 'AIMED',
+    icon: '🎯',
+    projects: [
+      {
+        id: 'aimed-core',
+        name: 'AIMED — AI Made Easily Deployable',
+        status: 'paused',
+        description: 'AI implementation consulting & deployment for SMBs — consulting, automation, custom tool builds',
+        agents: [],
+        cronJobs: [],
+        workflows: [],
+        tasks: [
+          { text: 'Define service tiers (consulting vs full implementation)', done: false },
+          { text: 'Build portfolio from personal projects as proof of work', done: false },
+          { text: 'Evaluate sustainability model', done: false },
+        ],
+        notes: 'Back burner. The skills being built now across all other domains ARE the portfolio. When ready, show up with receipts not a pitch deck.',
+        lastUpdated: '2026-02-15',
+      }
+    ]
+  }
+];
+
+// Collect all workflows across all projects for the Workflows tab
+function getAllWorkflows() {
+  const all = [];
+  DOMAINS.forEach(d => d.projects.forEach(p => {
+    if (p.workflows) {
+      p.workflows.forEach(w => {
+        all.push({ ...w, projectId: p.id, projectName: p.name, domainName: d.name });
+      });
+    }
+  }));
+  return all;
+}
+
+const DAILY_WORKFLOW_ORDER = [
+  { time: '07:00', name: 'Morning Intel' },
+  { time: '08:00', name: 'Scout Daily Analysis' },
+  { time: '08:30', name: 'Pull Scout Report' },
+  { time: '16:00', name: 'Afternoon Intel' },
+];
+
+const WEEKLY_SPECIAL = {
+  1: [{ time: '10:00', name: 'Elevate/UFO Check', agent: 'desktop-rook' }],
+  3: [{ time: '16:45', name: 'Black Hole Voting', agent: 'desktop-rook' }],
+};
+
+const ACTIVITY_FEED = [
+  { time: '7:00 AM', text: 'Crypto Intel ran — morning briefing sent to Telegram' },
+  { time: '8:00 AM', text: 'Scout analysis initiated on VPS' },
+  { time: '8:30 AM', text: 'Scout report pulled — 3 recommendations pending review' },
+  { time: '10:15 AM', text: 'Netrunner v3 rebuild started' },
+  { time: '10:55 AM', text: 'RSI Divergence confidence bumped 66→69' },
+  { time: '11:30 AM', text: 'LP Study Guide marked complete' },
+  { time: '1:00 PM', text: 'Homepage concept reviewed — awaiting Brandon feedback' },
+  { time: '2:15 PM', text: 'xAI sentiment API timeout — investigating' },
+  { time: '3:00 PM', text: 'Memory files synced — 12 entries updated' },
+  { time: '4:00 PM', text: 'Afternoon Crypto Intel scheduled' },
+];
+
+const CONFIG_FILES = [
+  { name: 'SOUL.md', desc: 'Who Rook is', content: 'Rook is the AI operations agent for Brandon\'s projects. Strategic, direct, focused on leverage and automation.' },
+  { name: 'AGENTS.md', desc: 'How Rook operates', content: '# Primary Directive\nHelp build automated systems and tools. Prioritize work that saves time, generates leverage, or produces output without manual effort.\n\n# Communication Style\nDirect and concise. Lead with the answer. Short responses for simple queries.' },
+  { name: 'IDENTITY.md', desc: 'Name, creature, vibe', content: 'Name: Rook\nIcon: ♜\nRole: AI Operations Agent\nVibe: Terminal-native, strategic, efficient' },
+  { name: 'USER.md', desc: 'Who Brandon is', content: 'Brandon — runs Portor Lighting (commercial LED manufacturer), Camarie Photography, and manages crypto/trading operations. Power user. Values automation and leverage.' },
+  { name: 'TOOLS.md', desc: 'Environment-specific notes', content: '# Local Tools & Environment\n\nCamera, SSH, TTS, and device configuration notes.' },
+  { name: 'HEARTBEAT.md', desc: 'Heartbeat tasks', content: '# Heartbeat Schedule\n\nPeriodic system checks and maintenance tasks.' },
+];
+
+const MEMORY_FILES = [
+  { name: 'MEMORY.md', size: '4.2 KB', modified: '2026-02-15', preview: 'Core memory store for Rook operations...' },
+  { name: 'memory/trading-decisions.md', size: '2.1 KB', modified: '2026-02-15', preview: 'Signal engine parameter changes and rationale...' },
+  { name: 'memory/project-status.md', size: '1.8 KB', modified: '2026-02-14', preview: 'Current status of all active projects...' },
+  { name: 'memory/brandon-preferences.md', size: '1.2 KB', modified: '2026-02-13', preview: 'Communication preferences and workflow...' },
+  { name: 'session-summaries/2026-02-15.md', size: '3.4 KB', modified: '2026-02-15', preview: 'Session: Netrunner v3 build, signal tuning...' },
+  { name: 'session-summaries/2026-02-14.md', size: '2.8 KB', modified: '2026-02-14', preview: 'Session: BLACK/NOVA strategy update...' },
+];
+
+// ============================================================
+// STATE
+// ============================================================
+
+let ws = null;
+let wsConnected = false;
+let liveData = { sessions: [], cronJobs: [], skills: [], config: {}, health: {} };
+let currentTab = 'overview';
+let projectFilter = 'all';
+let workflowView = 'daily';
+let collapsedDomains = JSON.parse(localStorage.getItem('nr_collapsed') || '{}');
+let expandedProjects = JSON.parse(localStorage.getItem('nr_expanded') || '{}');
+let projectOverrides = JSON.parse(localStorage.getItem('nr_projects') || '{}');
+let themeLight = localStorage.getItem('nr_theme') === 'light';
+
+function applyOverrides() {
+  DOMAINS.forEach(d => d.projects.forEach(p => {
+    const o = projectOverrides[p.id];
+    if (!o) return;
+    if (o.status) p.status = o.status;
+    if (o.notes !== undefined) p.notes = o.notes;
+    if (o.tasks) p.tasks = o.tasks;
+  }));
+}
+applyOverrides();
+
+function saveOverrides() {
+  const o = {};
+  DOMAINS.forEach(d => d.projects.forEach(p => {
+    o[p.id] = { status: p.status, notes: p.notes, tasks: p.tasks };
+  }));
+  localStorage.setItem('nr_projects', JSON.stringify(o));
+}
+
+// ============================================================
+// WEBSOCKET
+// ============================================================
+
+function wsConnect() {
+  try {
+    ws = new WebSocket(WS_URL);
+    ws.onopen = () => {
+      wsConnected = true;
+      updateConnStatus();
+      wsSend('auth', { token: GATEWAY_TOKEN });
+      wsSend('sessions.list', {});
+      wsSend('cron.list', {});
+      wsSend('skills.status', {});
+      wsSend('status', {});
+    };
+    ws.onmessage = (e) => {
+      try {
+        const msg = JSON.parse(e.data);
+        if (msg.type === 'sessions.list') liveData.sessions = msg.data || [];
+        if (msg.type === 'cron.list') liveData.cronJobs = msg.data || [];
+        if (msg.type === 'skills.status') liveData.skills = msg.data || [];
+        if (msg.type === 'status') liveData.health = msg.data || {};
+        renderCurrentTab();
+      } catch(err) {}
+    };
+    ws.onclose = () => { wsConnected = false; updateConnStatus(); setTimeout(wsConnect, 5000); };
+    ws.onerror = () => { ws.close(); };
+  } catch(e) {
+    wsConnected = false;
+    updateConnStatus();
+    setTimeout(wsConnect, 5000);
+  }
+}
+
+function wsSend(type, data) {
+  if (ws && ws.readyState === 1) ws.send(JSON.stringify({ type, ...data }));
+}
+
+function updateConnStatus() {
+  const dot = document.getElementById('connDot');
+  const label = document.getElementById('connLabel');
+  if (wsConnected) { dot.classList.add('connected'); label.textContent = 'connected'; }
+  else { dot.classList.remove('connected'); label.textContent = 'disconnected'; }
+}
+
+// ============================================================
+// CLOCK
+// ============================================================
+
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent = now.toLocaleTimeString('en-US', {
+    hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit',
+    timeZone: 'America/Chicago'
+  });
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ============================================================
+// THEME
+// ============================================================
+
+function toggleTheme() {
+  themeLight = !themeLight;
+  document.body.classList.toggle('theme-light', themeLight);
+  localStorage.setItem('nr_theme', themeLight ? 'light' : 'dark');
+}
+if (themeLight) document.body.classList.add('theme-light');
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.toggle('active', t.id === 'tab-' + tab));
+  renderCurrentTab();
+}
+
+document.getElementById('nav').addEventListener('click', e => {
+  const tab = e.target.closest('.nav-tab');
+  if (tab) switchTab(tab.dataset.tab);
+});
+
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+  const num = parseInt(e.key);
+  if (num >= 1 && num <= 7) {
+    const tabs = ['overview','projects','agents','workflows','skills','memory','config'];
+    switchTab(tabs[num - 1]);
+  }
+  if (e.key === 'r' || e.key === 'R') { renderCurrentTab(); }
+  if (e.key === 't' || e.key === 'T') { toggleTheme(); }
+});
+
+function renderCurrentTab() {
+  const renderers = { overview: renderOverview, projects: renderProjects, agents: renderAgents, workflows: renderWorkflows, skills: renderSkills, memory: renderMemory, config: renderConfig };
+  if (renderers[currentTab]) renderers[currentTab]();
+}
+
+// ============================================================
+// HELPERS
+// ============================================================
+
+function statusBadge(status) {
+  const cfg = STATUS_CONFIG[status];
+  if (cfg) return `<span class="badge ${cfg.badge}">${cfg.label}</span>`;
+  return `<span class="badge badge-paused">${status}</span>`;
+}
+
+function statusEmoji(status) {
+  const cfg = STATUS_CONFIG[status];
+  return cfg ? cfg.emoji : '⚪';
+}
+
+function agentName(id) {
+  const a = AGENTS.find(a => a.id === id);
+  return a ? `${a.icon} ${a.name}` : id;
+}
+
+function agentTag(id) {
+  const cls = id === 'desktop-rook' ? 'tag-desktop' : id === 'cloud-rook' ? 'tag-cloud' : 'tag-scout';
+  return `<span class="timeline-agent-tag ${cls}">${agentName(id)}</span>`;
+}
+
+function findProject(id) {
+  for (const d of DOMAINS) for (const p of d.projects) if (p.id === id) return p;
+  return null;
+}
+
+function allProjects() {
+  return DOMAINS.flatMap(d => d.projects);
+}
+
+// ============================================================
+// RENDER: OVERVIEW
+// ============================================================
+
+function renderOverview() {
+  const projects = allProjects();
+  const liveCount = projects.filter(p => p.status === 'live').length;
+  const activeCount = projects.filter(p => ['active','building','testing'].includes(p.status)).length;
+  const cronCount = liveData.cronJobs.length || 6;
+  const memCount = MEMORY_FILES.length;
+  const wfCount = getAllWorkflows().length;
+
+  let html = `
+  <div class="grid-6">
+    <div class="stat-card"><div class="stat-value">${AGENTS.length}</div><div class="stat-label">Agents</div></div>
+    <div class="stat-card"><div class="stat-value">${liveCount}</div><div class="stat-label">Live Projects</div></div>
+    <div class="stat-card"><div class="stat-value">${activeCount}</div><div class="stat-label">In Development</div></div>
+    <div class="stat-card"><div class="stat-value">${projects.length}</div><div class="stat-label">Total Projects</div></div>
+    <div class="stat-card"><div class="stat-value">${wfCount}</div><div class="stat-label">Workflows</div></div>
+    <div class="stat-card"><div class="stat-value">${liveData.health.version || '2026.2.14'}</div><div class="stat-label">OpenClaw</div></div>
+  </div>
+
+  <div class="section-title">Weekly Priorities — Feb 16-22</div>
+  <div class="card" style="padding:16px">
+    <div style="display:flex;flex-direction:column;gap:10px">
+      ${[
+        { num: 1, name: 'Portor Inventory Tool', domain: '🏭', note: 'Close to done — iterate to finish', color: 'var(--red)' },
+        { num: 2, name: 'Portor Cross Tool', domain: '🏭', note: 'Back to planning → kick off data mining', color: 'var(--amber)' },
+        { num: 3, name: 'Trading Engine', domain: '📈', note: 'Dial in Desktop/Cloud workflow', color: 'var(--amber)' },
+        { num: 4, name: 'Rook Ops (Netrunner)', domain: '♜', note: 'All enhancements, especially NR', color: 'var(--blue)' },
+        { num: 5, name: 'Crypto Intel Tools', domain: '🪙', note: 'Fine tuning reliability & output', color: 'var(--slate)' },
+      ].map(p => `
+        <div style="display:flex;align-items:center;gap:12px;padding:8px 12px;background:var(--bg);border-radius:8px;border-left:3px solid ${p.color}">
+          <span style="font-family:var(--font-mono);font-weight:700;font-size:1.1rem;color:${p.color};min-width:24px">${p.num}</span>
+          <span style="font-size:1rem">${p.domain}</span>
+          <div style="flex:1">
+            <div style="font-weight:600;font-size:0.9rem">${p.name}</div>
+            <div style="font-size:0.75rem;color:var(--text-dim)">${p.note}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  </div>
+
+  <div class="section-title">Agent Status</div>
+  <div class="grid-3">
+    ${AGENTS.map(a => {
+      const pct = Math.round((a.context.used / a.context.max) * 100);
+      const barClass = pct > 80 ? 'danger' : pct > 50 ? 'warn' : '';
+      return `<div class="agent-card">
+        <div class="agent-header">
+          <span class="agent-icon">${a.icon}</span>
+          <span class="agent-name">${a.name}</span>
+          ${statusBadge(a.status)}
+        </div>
+        <div class="agent-meta">
+          <div class="agent-meta-row"><span class="agent-meta-key">Model</span><span class="agent-meta-val">${a.model}</span></div>
+          <div class="agent-meta-row"><span class="agent-meta-key">Host</span><span class="agent-meta-val">${a.host}</span></div>
+          <div class="agent-meta-row">
+            <span class="agent-meta-key">Context</span>
+            <span class="agent-meta-val">${(a.context.used/1000).toFixed(0)}k / ${(a.context.max/1000).toFixed(0)}k</span>
+          </div>
+        </div>
+        <div class="progress-bar"><div class="progress-fill ${barClass}" style="width:${pct}%"></div></div>
+      </div>`;
+    }).join('')}
+  </div>
+
+  <div class="section-title">Today's Timeline</div>
+  <div class="today-timeline">
+    ${DAILY_WORKFLOW_ORDER.map((w, i) => {
+      const allWf = getAllWorkflows();
+      const match = allWf.find(wf => wf.name === w.name);
+      const status = match && match.lastStatus === 'completed' ? 'completed' : 'pending';
+      const icon = status === 'completed' ? '✅' : '⏳';
+      return `${i > 0 ? '<span class="today-arrow">→</span>' : ''}
+        <div class="today-event ${status}">
+          ${icon} <strong>${w.time}</strong> ${w.name}
+        </div>`;
+    }).join('')}
+  </div>
+
+  <div class="section-title">Portfolio Overview</div>
+  <div class="grid-4">
+    ${DOMAINS.map(d => {
+      const statuses = {};
+      d.projects.forEach(p => { statuses[p.status] = (statuses[p.status] || 0) + 1; });
+      return `<div class="card" style="cursor:pointer" onclick="switchTab('projects')">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <span style="font-size:1.2rem">${d.icon}</span>
+          <span class="project-name">${d.name}</span>
+        </div>
+        <div style="font-size:0.78rem;color:var(--text-dim)">${d.projects.length} project${d.projects.length !== 1 ? 's' : ''}</div>
+        <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">
+          ${Object.entries(statuses).map(([s, c]) => `<span style="font-size:0.68rem">${statusEmoji(s)} ${c} ${STATUS_CONFIG[s]?.label || s}</span>`).join('')}
+        </div>
+      </div>`;
+    }).join('')}
+  </div>
+
+  <div class="section-title">Recent Activity</div>
+  <div class="card">
+    ${ACTIVITY_FEED.map(f => `
+      <div class="feed-item">
+        <span class="feed-time">${f.time}</span>
+        <span class="feed-text">${f.text}</span>
+      </div>
+    `).join('')}
+  </div>
+
+  <div class="section-title">System Health</div>
+  <div class="grid-4">
+    <div class="stat-card"><div style="display:flex;align-items:center;gap:8px"><div class="conn-dot connected"></div><span>Gateway</span></div></div>
+    <div class="stat-card"><div style="display:flex;align-items:center;gap:8px"><div class="conn-dot connected"></div><span>Desktop WSL2</span></div></div>
+    <div class="stat-card"><div style="display:flex;align-items:center;gap:8px"><div class="conn-dot connected"></div><span>VPS</span></div></div>
+    <div class="stat-card"><div style="display:flex;align-items:center;gap:8px"><div class="conn-dot connected"></div><span>Telegram</span></div></div>
+  </div>
+  `;
+  document.getElementById('tab-overview').innerHTML = html;
+}
+
+// ============================================================
+// RENDER: PROJECTS
+// ============================================================
+
+let activeDomain = null;
+
+function renderProjects() {
+  let html = `
+  <div class="filter-bar">
+    <button class="filter-btn ${projectFilter === 'all' ? 'active' : ''}" onclick="projectFilter='all';renderProjects()">All</button>
+    ${ALL_STATUSES.map(s => `<button class="filter-btn ${projectFilter === s ? 'active' : ''}" onclick="projectFilter='${s}';renderProjects()">${STATUS_CONFIG[s].emoji} ${STATUS_CONFIG[s].label}</button>`).join('')}
+  </div>
+  `;
+
+  if (!activeDomain) {
+    // Top-level: show domain cards
+    html += `<div class="domains-grid">`;
+    DOMAINS.forEach(d => {
+      let projects = d.projects;
+      if (projectFilter !== 'all') projects = projects.filter(p => p.status === projectFilter);
+      const liveCount = d.projects.filter(p => p.status === 'live').length;
+      const activeCount = d.projects.filter(p => ['active','building','testing'].includes(p.status)).length;
+      const totalWorkflows = d.projects.reduce((s, p) => s + (p.workflows ? p.workflows.length : 0), 0);
+      const totalAgents = [...new Set(d.projects.flatMap(p => p.agents || []))].length;
+      const pendingTasks = d.projects.reduce((s, p) => s + p.tasks.filter(t => !t.done).length, 0);
+
+      html += `
+      <div class="domain-card ${projects.length === 0 && projectFilter !== 'all' ? 'style="opacity:0.4"' : ''}" onclick="activeDomain='${d.id}';renderProjects()">
+        <div class="domain-card-header">
+          <span class="domain-icon">${d.icon}</span>
+          <span class="domain-name">${d.name}</span>
+        </div>
+        <div class="domain-stats">
+          <div class="domain-stat"><span class="domain-stat-val">${d.projects.length}</span><span class="domain-stat-lbl">Projects</span></div>
+          <div class="domain-stat"><span class="domain-stat-val">${liveCount}</span><span class="domain-stat-lbl">Live</span></div>
+          <div class="domain-stat"><span class="domain-stat-val">${activeCount}</span><span class="domain-stat-lbl">Active</span></div>
+          <div class="domain-stat"><span class="domain-stat-val">${totalWorkflows}</span><span class="domain-stat-lbl">Workflows</span></div>
+        </div>
+        <div style="margin-top:12px;margin-bottom:16px">
+          <div class="domain-meta-row"><span class="domain-meta-key">Agents</span><span class="domain-meta-val">${totalAgents}</span></div>
+          <div class="domain-meta-row"><span class="domain-meta-key">Pending Tasks</span><span class="domain-meta-val">${pendingTasks}</span></div>
+        </div>
+        <div class="card-action-btn">Enter Domain →</div>
+      </div>`;
+    });
+    html += `</div>`;
+  } else {
+    // Drilled into a domain: show its projects
+    const d = DOMAINS.find(d => d.id === activeDomain);
+    let projects = d.projects;
+    if (projectFilter !== 'all') projects = projects.filter(p => p.status === projectFilter);
+
+    const statusOrder = [
+      { key: 'live', label: '🟢 Live & Operational' },
+      { key: 'active', label: '🔵 Active' },
+      { key: 'building', label: '🔨 Building' },
+      { key: 'testing', label: '🧪 Testing' },
+      { key: 'concept', label: '💡 Concept' },
+      { key: 'built', label: '✅ Built' },
+      { key: 'planned', label: '📋 Planned' },
+      { key: 'queued', label: '⏳ Queued' },
+      { key: 'maintenance', label: '🔧 Maintenance' },
+      { key: 'paused', label: '⏸️ Paused' },
+    ];
+
+    let sectionsHtml = '';
+    statusOrder.forEach(s => {
+      const sectionProjects = projects.filter(p => p.status === s.key);
+      if (sectionProjects.length === 0) return;
+      sectionsHtml += `
+        <div style="margin-bottom:24px">
+          <div style="font-family:var(--font-mono);font-size:0.75rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--border)">
+            ${s.label} <span style="color:var(--text-muted)">(${sectionProjects.length})</span>
+          </div>
+          <div class="domain-projects">
+            ${sectionProjects.map(p => renderProjectCard(p, d)).join('')}
+          </div>
+        </div>`;
+    });
+
+    html += `
+    <div class="domain-expanded">
+      <div class="domain-expanded-header" onclick="activeDomain=null;renderProjects()">
+        <span class="domain-back">← Back</span>
+        <span class="domain-icon">${d.icon}</span>
+        <span class="domain-expanded-name">${d.name}</span>
+        <span class="domain-expanded-count">${projects.length} project${projects.length !== 1 ? 's' : ''}</span>
+      </div>
+      ${sectionsHtml}
+    </div>`;
+  }
+
+  document.getElementById('tab-projects').innerHTML = html;
+}
+
+function renderProjectCard(p, domain) {
+  const tasksDone = p.tasks.filter(t => t.done).length;
+  const tasksTotal = p.tasks.length;
+  const tasksPending = tasksTotal - tasksDone;
+  const isExpanded = expandedProjects[p.id];
+  const wfCount = p.workflows ? p.workflows.length : 0;
+  const agentCount = p.agents ? p.agents.length : 0;
+  return `
+  <div class="project-card ${isExpanded ? 'expanded' : ''}" id="project-${p.id}">
+    <div class="project-card-top" onclick="toggleProject('${p.id}')">
+      <span class="project-name">${statusEmoji(p.status)} ${p.name}</span>
+      <div style="display:flex;align-items:center;gap:8px">
+        ${statusBadge(p.status)}
+        <span style="color:var(--text-muted);font-size:0.75rem">${isExpanded ? '▲' : '▼'}</span>
+      </div>
+    </div>
+    <div class="project-desc">${p.description}</div>
+    <div class="domain-stats" style="margin-top:8px;margin-bottom:4px">
+      <div class="domain-stat"><span class="domain-stat-val" style="font-size:1rem">${wfCount}</span><span class="domain-stat-lbl">Workflows</span></div>
+      <div class="domain-stat"><span class="domain-stat-val" style="font-size:1rem">${agentCount}</span><span class="domain-stat-lbl">Agents</span></div>
+      <div class="domain-stat"><span class="domain-stat-val" style="font-size:1rem">${tasksPending}</span><span class="domain-stat-lbl">Tasks</span></div>
+    </div>
+    <div class="project-detail">
+      <!-- Status Edit -->
+      <div class="project-section">
+        <div class="project-section-title">Status</div>
+        <select class="status-select" onchange="updateProjectStatus('${p.id}', this.value)">
+          ${ALL_STATUSES.map(s =>
+            `<option value="${s}" ${p.status === s ? 'selected' : ''}>${STATUS_CONFIG[s].emoji} ${STATUS_CONFIG[s].label}</option>`
+          ).join('')}
+        </select>
+      </div>
+
+      <!-- Workflows -->
+      <div class="project-section">
+        <div class="project-section-title">Workflows</div>
+        ${p.workflows && p.workflows.length ? p.workflows.map(w => {
+          const statusIcon = w.lastStatus === 'completed' ? '✅' : w.lastStatus === 'failed' ? '❌' : '⏳';
+          return `<div class="workflow-embed">
+            <div class="workflow-embed-name">
+              <span>⏰</span> ${w.name}
+            </div>
+            <div class="workflow-embed-meta">
+              <div><strong>Schedule:</strong> ${w.schedule} CST</div>
+              <div><strong>Agent:</strong> ${agentName(w.agent)}</div>
+              <div><strong>Output:</strong> ${w.output}</div>
+              ${w.dependsOn ? `<div><strong>Depends on:</strong> ${w.dependsOn}</div>` : ''}
+              ${w.lastRun ? `<div><strong>Last run:</strong> ${statusIcon} ${w.lastRun}</div>` : ''}
+            </div>
+          </div>`;
+        }).join('') : '<div class="workflow-no">No workflows configured</div>'}
+      </div>
+
+      <!-- Tasks -->
+      <div class="project-section">
+        <div class="project-section-title">Tasks</div>
+        <ul class="task-list">
+          ${p.tasks.map((t, i) => `
+            <li class="task-item">
+              <div class="task-checkbox ${t.done ? 'checked' : ''}" onclick="toggleTask('${p.id}', ${i})"></div>
+              <span class="task-text ${t.done ? 'done' : ''}">${t.text}</span>
+              ${t.priority ? `<span class="task-priority ${t.priority}">${t.priority}</span>` : ''}
+              <span style="cursor:pointer;color:var(--text-muted);font-size:0.7rem" onclick="deleteTask('${p.id}', ${i})">✕</span>
+            </li>
+          `).join('')}
+        </ul>
+        <div class="task-add">
+          <input type="text" placeholder="Add task..." id="task-input-${p.id}" onkeydown="if(event.key==='Enter')addTask('${p.id}')">
+          <button onclick="addTask('${p.id}')">Add</button>
+        </div>
+      </div>
+
+      <!-- Notes -->
+      <div class="project-section">
+        <div class="project-section-title">Notes</div>
+        <textarea class="notes-area" onchange="updateProjectNotes('${p.id}', this.value)">${p.notes}</textarea>
+      </div>
+    </div>
+    ${p.link ? `<div style="margin-top:auto;padding-top:12px"><a href="${p.link}" target="_blank" onclick="event.stopPropagation()" class="card-action-btn">Open Project ▶</a></div>` : ''}
+  </div>`;
+}
+
+function toggleDomain(id) {
+  collapsedDomains[id] = !collapsedDomains[id];
+  localStorage.setItem('nr_collapsed', JSON.stringify(collapsedDomains));
+  renderProjects();
+}
+
+function toggleProject(id) {
+  expandedProjects[id] = !expandedProjects[id];
+  localStorage.setItem('nr_expanded', JSON.stringify(expandedProjects));
+  renderProjects();
+}
+
+function updateProjectStatus(id, status) {
+  const p = findProject(id);
+  if (p) { p.status = status; saveOverrides(); renderProjects(); }
+}
+
+function updateProjectNotes(id, notes) {
+  const p = findProject(id);
+  if (p) { p.notes = notes; saveOverrides(); }
+}
+
+function toggleTask(pid, idx) {
+  const p = findProject(pid);
+  if (p && p.tasks[idx]) { p.tasks[idx].done = !p.tasks[idx].done; saveOverrides(); renderProjects(); }
+}
+
+function addTask(pid) {
+  const input = document.getElementById('task-input-' + pid);
+  if (!input || !input.value.trim()) return;
+  const p = findProject(pid);
+  if (p) { p.tasks.push({ text: input.value.trim(), done: false }); saveOverrides(); renderProjects(); }
+}
+
+function deleteTask(pid, idx) {
+  const p = findProject(pid);
+  if (p) { p.tasks.splice(idx, 1); saveOverrides(); renderProjects(); }
+}
+
+// ============================================================
+// RENDER: AGENTS
+// ============================================================
+
+function renderAgents() {
+  let html = '';
+  AGENTS.forEach(a => {
+    const pct = Math.round((a.context.used / a.context.max) * 100);
+    const barClass = pct > 80 ? 'danger' : pct > 50 ? 'warn' : '';
+    const assignedProjects = allProjects().filter(p => p.agents.includes(a.id));
+    const assignedWorkflows = getAllWorkflows().filter(w => w.agent === a.id);
+
+    html += `
+    <div class="card" style="margin-bottom:16px">
+      <div class="agent-header">
+        <span class="agent-icon" style="font-size:2rem">${a.icon}</span>
+        <div>
+          <div class="agent-name" style="font-size:1.1rem">${a.name}</div>
+          <div style="margin-top:2px">${statusBadge(a.status)}</div>
+        </div>
+      </div>
+      <div class="grid-2" style="margin-top:16px">
+        <div>
+          <div class="agent-meta">
+            <div class="agent-meta-row"><span class="agent-meta-key">Model</span><span class="agent-meta-val">${a.model}</span></div>
+            <div class="agent-meta-row"><span class="agent-meta-key">Host</span><span class="agent-meta-val">${a.host}</span></div>
+            <div class="agent-meta-row"><span class="agent-meta-key">Version</span><span class="agent-meta-val">${a.version || 'unknown'}</span></div>
+            ${a.schedule ? `<div class="agent-meta-row"><span class="agent-meta-key">Schedule</span><span class="agent-meta-val">${a.schedule}</span></div>` : ''}
+            ${a.extra ? `<div class="agent-meta-row"><span class="agent-meta-key">Note</span><span class="agent-meta-val">${a.extra}</span></div>` : ''}
+          </div>
+          <div style="margin-top:12px">
+            <div class="agent-meta-key" style="margin-bottom:4px">Context Usage — ${pct}%</div>
+            <div class="progress-bar"><div class="progress-fill ${barClass}" style="width:${pct}%"></div></div>
+          </div>
+        </div>
+        <div>
+          <div class="project-section-title">Assigned Projects (${assignedProjects.length})</div>
+          ${assignedProjects.length ? assignedProjects.map(p => `
+            <div style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:0.82rem;cursor:pointer" onclick="switchTab('projects')">
+              ${statusEmoji(p.status)} ${p.name} ${statusBadge(p.status)}
+            </div>
+          `).join('') : '<div style="color:var(--text-muted);font-size:0.82rem">None assigned</div>'}
+
+          ${assignedWorkflows.length ? `
+            <div class="project-section-title" style="margin-top:12px">Workflows (${assignedWorkflows.length})</div>
+            ${assignedWorkflows.map(w => `<div style="font-size:0.82rem;padding:2px 0;color:var(--text-dim);cursor:pointer" onclick="switchTab('workflows')">⏲ ${w.name} <span style="color:var(--text-muted);font-size:0.7rem">— ${w.projectName}</span></div>`).join('')}
+          ` : ''}
+        </div>
+      </div>
+    </div>`;
+  });
+  document.getElementById('tab-agents').innerHTML = html;
+}
+
+// ============================================================
+// RENDER: WORKFLOWS
+// ============================================================
+
+function renderWorkflows() {
+  const allWf = getAllWorkflows();
+
+  let html = `
+  <div class="view-toggle">
+    <button class="view-btn ${workflowView === 'daily' ? 'active' : ''}" onclick="workflowView='daily';renderWorkflows()">Daily</button>
+    <button class="view-btn ${workflowView === 'weekly' ? 'active' : ''}" onclick="workflowView='weekly';renderWorkflows()">Weekly</button>
+  </div>`;
+
+  if (workflowView === 'daily') {
+    // Sort workflows by schedule time
+    const sorted = [...allWf].sort((a, b) => {
+      const ta = (a.schedule.match(/(\d+:\d+\s*[AP]M)/i) || [''])[0];
+      const tb = (b.schedule.match(/(\d+:\d+\s*[AP]M)/i) || [''])[0];
+      return ta.localeCompare(tb);
+    });
+
+    html += `<div class="timeline">`;
+    sorted.forEach(w => {
+      const statusIcon = w.lastStatus === 'completed' ? 'completed' : w.lastStatus === 'failed' ? 'failed' : 'pending';
+      const hasDep = !!w.dependsOn;
+      const timeMatch = w.schedule.match(/(\d+:\d+\s*[AP]M)/i);
+      const displayTime = timeMatch ? timeMatch[0] : w.schedule;
+
+      html += `
+      <div class="timeline-item">
+        <div class="timeline-dot ${statusIcon}"></div>
+        ${hasDep ? '<div class="timeline-dep-arrow"></div>' : ''}
+        <div class="timeline-time">${displayTime} CST ${w.schedule.match(/^(Mon|Tue|Wed|Thu|Fri|Sat|Sun|Daily)/i)?.[0] || ''}</div>
+        <div class="timeline-event-card">
+          <div class="timeline-event-name">${w.name}</div>
+          <div class="timeline-event-meta">
+            ${agentTag(w.agent)}
+            <span class="workflow-project-tag" onclick="switchTab('projects')" style="margin-left:6px">${w.projectName}</span>
+            <span style="margin-left:6px;font-size:0.68rem;color:var(--text-muted)">${w.domainName}</span>
+          </div>
+          <div class="timeline-event-meta" style="margin-top:4px">Output: ${w.output}</div>
+          ${w.dependsOn ? `<div class="timeline-event-meta" style="margin-top:2px;color:var(--amber)">⤷ Depends on: ${w.dependsOn}</div>` : ''}
+          ${w.lastRun ? `<div class="timeline-event-meta" style="margin-top:2px">${w.lastStatus === 'completed' ? '✅' : '❌'} Last: ${w.lastRun}</div>` : ''}
+        </div>
+      </div>`;
+    });
+    html += `</div>`;
+  } else {
+    const days = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
+    html += `<div class="weekly-grid">`;
+    days.forEach((day, di) => {
+      html += `<div class="weekly-day"><div class="weekly-day-name">${day}</div>`;
+      // Daily workflows
+      allWf.filter(w => w.schedule.startsWith('Daily')).forEach(w => {
+        const agentCls = w.agent === 'desktop-rook' ? 'tag-desktop' : w.agent === 'cloud-rook' ? 'tag-cloud' : 'tag-scout';
+        const bg = w.agent === 'desktop-rook' ? 'var(--teal-glow)' : w.agent === 'cloud-rook' ? 'var(--purple-dim)' : 'var(--green-dim)';
+        const timeMatch = w.schedule.match(/(\d+:\d+)/);
+        const t = timeMatch ? timeMatch[0] : '';
+        html += `<div class="weekly-event" style="background:${bg}" title="${w.name} — ${w.projectName}">${t} ${w.name.split(' ').slice(0,2).join(' ')}</div>`;
+      });
+      // Weekly-specific
+      const dayNum = di + 1;
+      // Check for day-specific workflows
+      const dayNames = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+      allWf.filter(w => w.schedule.startsWith(dayNames[di])).forEach(w => {
+        const timeMatch = w.schedule.match(/(\d+:\d+)/);
+        const t = timeMatch ? timeMatch[0] : '';
+        html += `<div class="weekly-event" style="background:var(--amber-dim);color:var(--amber)" title="${w.name} — ${w.projectName}">${t} ${w.name}</div>`;
+      });
+      html += `</div>`;
+    });
+    html += `</div>`;
+  }
+
+  document.getElementById('tab-workflows').innerHTML = html;
+}
+
+// ============================================================
+// RENDER: SKILLS
+// ============================================================
+
+function renderSkills() {
+  const skills = liveData.skills.length ? liveData.skills : [
+    { name: 'web_search', status: 'eligible', desc: 'Search the web via Brave API' },
+    { name: 'web_fetch', status: 'eligible', desc: 'Fetch and extract content from URLs' },
+    { name: 'browser', status: 'eligible', desc: 'Browser automation and control' },
+    { name: 'tts', status: 'eligible', desc: 'Text-to-speech conversion' },
+    { name: 'camera', status: 'eligible', desc: 'Node camera snapshot and clips' },
+    { name: 'screen_record', status: 'eligible', desc: 'Screen recording on nodes' },
+    { name: 'canvas', status: 'eligible', desc: 'Present and control canvas UI' },
+    { name: 'nodes', status: 'eligible', desc: 'Discover and control paired nodes' },
+    { name: 'message', status: 'eligible', desc: 'Send messages via channel plugins' },
+    { name: 'image', status: 'eligible', desc: 'Analyze images with vision model' },
+    { name: 'memory_search', status: 'blocked', desc: 'Semantic search across memory files', missing: 'Embedding API key not configured' },
+  ];
+
+  const active = skills.filter(s => s.status === 'eligible');
+  const blocked = skills.filter(s => s.status === 'blocked');
+
+  let html = `
+  <input type="text" class="search-bar" placeholder="Search skills..." oninput="filterSkills(this.value)">
+
+  <div class="section-title">Active Skills (${active.length})</div>
+  <div class="grid-3" id="skills-active">
+    ${active.map(s => `
+      <div class="skill-card" data-name="${s.name}">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span class="skill-name">${s.name}</span>
+          ${statusBadge(s.status)}
+        </div>
+        <div class="skill-desc">${s.desc || ''}</div>
+      </div>
+    `).join('')}
+  </div>
+
+  ${blocked.length ? `
+    <div class="section-title">Blocked (${blocked.length})</div>
+    <div class="grid-3" id="skills-blocked">
+      ${blocked.map(s => `
+        <div class="skill-card" data-name="${s.name}">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span class="skill-name">${s.name}</span>
+            ${statusBadge(s.status)}
+          </div>
+          <div class="skill-desc">${s.desc || ''}</div>
+          ${s.missing ? `<div style="font-size:0.72rem;color:var(--amber);margin-top:4px">⚠ ${s.missing}</div>` : ''}
+        </div>
+      `).join('')}
+    </div>
+  ` : ''}
+  `;
+  document.getElementById('tab-skills').innerHTML = html;
+}
+
+function filterSkills(q) {
+  q = q.toLowerCase();
+  document.querySelectorAll('.skill-card').forEach(c => {
+    c.style.display = c.dataset.name.includes(q) ? '' : 'none';
+  });
+}
+
+// ============================================================
+// RENDER: MEMORY
+// ============================================================
+
+function renderMemory() {
+  let html = `
+  <input type="text" class="search-bar" placeholder="Search memory files..." oninput="filterMemory(this.value)">
+  ${MEMORY_FILES.map((f, i) => `
+    <div class="file-viewer" data-name="${f.name.toLowerCase()}" id="mem-${i}">
+      <div class="file-header" onclick="document.getElementById('mem-${i}').classList.toggle('open')">
+        <span class="file-name">📄 ${f.name}</span>
+        <span class="file-meta">${f.size} · ${f.modified}</span>
+      </div>
+      <div class="file-content">${f.preview}\n\n— Full content loaded from memory system —</div>
+    </div>
+  `).join('')}
+  `;
+  document.getElementById('tab-memory').innerHTML = html;
+}
+
+function filterMemory(q) {
+  q = q.toLowerCase();
+  document.querySelectorAll('.file-viewer').forEach(f => {
+    f.style.display = f.dataset.name.includes(q) ? '' : 'none';
+  });
+}
+
+// ============================================================
+// RENDER: CONFIG
+// ============================================================
+
+function renderConfig() {
+  let html = CONFIG_FILES.map((f, i) => `
+    <div class="file-viewer" id="cfg-${i}">
+      <div class="file-header" onclick="document.getElementById('cfg-${i}').classList.toggle('open')">
+        <div>
+          <span class="file-name">📋 ${f.name}</span>
+          <span style="margin-left:12px;font-size:0.72rem;color:var(--text-muted)">${f.desc}</span>
+        </div>
+        <span class="file-meta">▼</span>
+      </div>
+      <div class="file-content">${f.content}</div>
+    </div>
+  `).join('');
+  document.getElementById('tab-config').innerHTML = html;
+}
+
+// ============================================================
+// INIT
+// ============================================================
+
+renderOverview();
+wsConnect();
+
+</script>
+</body>
+</html>
