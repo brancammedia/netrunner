@@ -840,16 +840,10 @@ const GATEWAY_TOKEN = 'b9f15332815cdc8735b20bce7969f8636c743a2a86717152';
 const WS_URL = 'ws://localhost:18789';
 
 const STATUS_CONFIG = {
-  live:        { emoji: '🟢', label: 'Live',        badge: 'badge-live' },
-  active:      { emoji: '🔵', label: 'Active',      badge: 'badge-active' },
+  planning:    { emoji: '📋', label: 'Planning',    badge: 'badge-planning' },
   building:    { emoji: '🔨', label: 'Building',    badge: 'badge-building' },
-  testing:     { emoji: '🧪', label: 'Testing',     badge: 'badge-testing' },
-  concept:     { emoji: '💡', label: 'Concept',     badge: 'badge-concept' },
-  planned:     { emoji: '📋', label: 'Planned',     badge: 'badge-planned' },
-  queued:      { emoji: '⏳', label: 'Queued',      badge: 'badge-queued' },
+  deployed:    { emoji: '🟢', label: 'Deployed',    badge: 'badge-deployed' },
   paused:      { emoji: '⏸️', label: 'Paused',      badge: 'badge-paused' },
-  maintenance: { emoji: '🔧', label: 'Maintenance', badge: 'badge-maintenance' },
-  built:       { emoji: '✅', label: 'Built',       badge: 'badge-built' },
 };
 const ALL_STATUSES = Object.keys(STATUS_CONFIG);
 
@@ -893,22 +887,22 @@ const DOMAINS = [
     name: 'Portor Lighting',
     icon: '💡',
     projects: [
-      { id: 'portor-homepage', name: 'Main HomePage', status: 'live', description: 'Portal landing page', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Main%20HomePage/index.html' },
-      { id: 'pricing-main', name: 'Pricing Main with Inventory', status: 'live', description: 'Primary pricing portal with live inventory', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/pricing%20main%20with%20inventory/index.html' },
-      { id: 'pricing-dist', name: 'Pricing - Distribution', status: 'live', description: 'Distribution-specific pricing portal', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Pricing%20-%20Distribution/index.html' },
-      { id: 'pole-pricing-main', name: 'Pole Pricing Main', status: 'live', description: 'Pole product pricing portal', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Pole%20Pricing%20Main/index.html' },
-      { id: 'pole-pricing-dist', name: 'Pole Pricing - Distribution', status: 'live', description: 'Distribution pole pricing', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Pole%20Pricing%20-%20Distribution/index.html' },
-      { id: 'quick-hub', name: 'Quick Hub', status: 'live', description: 'Quick reference product hub', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Quick%20Hub/index.html' },
-      { id: 'quick-hub-dist', name: 'Quick Hub Distribution', status: 'live', description: 'Distribution quick hub', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Quick%20Hub%20Distribution/index.html' },
-      { id: 'inventory', name: 'Inventory Dashboard', status: 'live', description: 'Live inventory viewer across warehouses', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/inventory/index.html' },
-      { id: 'clearance', name: 'Clearance Stock', status: 'live', description: 'Clearance and overstock management', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/clearance-stock/index.html' },
-      { id: 'incoming-orders', name: 'Incoming Orders & Shipments', status: 'live', description: 'Track incoming POs and shipments', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Incoming%20Orders%20and%20Shipments/index.html' },
-      { id: 'louisville', name: 'Louisville Replenishment', status: 'live', description: 'Ontario→Louisville transfer management', agents: [], cronJobs: [], workflows: [], tasks: ['Audit categorizations for misclassified SKUs','Set minimum thresholds & reorder quantities per SKU','Import monthly run rate data'], notes: '', lastUpdated: '2026-02-16', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Louisville%20Replenishment/index.html' },
-      { id: 'support', name: 'Support', status: 'live', description: 'Support resources portal', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Support/index.html' },
-      { id: 'cloud-functions', name: 'Cloud Functions (Backend)', status: 'live', description: 'GCP Cloud Functions powering all tools', agents: ['desktop-rook'], cronJobs: [], workflows: [], tasks: [], notes: 'Never push without Brandon approval', lastUpdated: '2026-02-15' },
+      { id: 'portor-homepage', name: 'Main HomePage', status: 'deployed', description: 'Portal landing page', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Main%20HomePage/index.html' },
+      { id: 'pricing-main', name: 'Pricing Main with Inventory', status: 'deployed', description: 'Primary pricing portal with live inventory', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/pricing%20main%20with%20inventory/index.html' },
+      { id: 'pricing-dist', name: 'Pricing - Distribution', status: 'deployed', description: 'Distribution-specific pricing portal', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Pricing%20-%20Distribution/index.html' },
+      { id: 'pole-pricing-main', name: 'Pole Pricing Main', status: 'deployed', description: 'Pole product pricing portal', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Pole%20Pricing%20Main/index.html' },
+      { id: 'pole-pricing-dist', name: 'Pole Pricing - Distribution', status: 'deployed', description: 'Distribution pole pricing', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Pole%20Pricing%20-%20Distribution/index.html' },
+      { id: 'quick-hub', name: 'Quick Hub', status: 'deployed', description: 'Quick reference product hub', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Quick%20Hub/index.html' },
+      { id: 'quick-hub-dist', name: 'Quick Hub Distribution', status: 'deployed', description: 'Distribution quick hub', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Quick%20Hub%20Distribution/index.html' },
+      { id: 'inventory', name: 'Inventory Dashboard', status: 'deployed', description: 'Live inventory viewer across warehouses', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/inventory/index.html' },
+      { id: 'clearance', name: 'Clearance Stock', status: 'deployed', description: 'Clearance and overstock management', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/clearance-stock/index.html' },
+      { id: 'incoming-orders', name: 'Incoming Orders & Shipments', status: 'deployed', description: 'Track incoming POs and shipments', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Incoming%20Orders%20and%20Shipments/index.html' },
+      { id: 'louisville', name: 'Louisville Replenishment', status: 'deployed', description: 'Ontario→Louisville transfer management', agents: [], cronJobs: [], workflows: [], tasks: ['Audit categorizations for misclassified SKUs','Set minimum thresholds & reorder quantities per SKU','Import monthly run rate data'], notes: '', lastUpdated: '2026-02-16', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Louisville%20Replenishment/index.html' },
+      { id: 'support', name: 'Support', status: 'deployed', description: 'Support resources portal', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Support/index.html' },
+      { id: 'cloud-functions', name: 'Cloud Functions (Backend)', status: 'deployed', description: 'GCP Cloud Functions powering all tools', agents: ['desktop-rook'], cronJobs: [], workflows: [], tasks: [], notes: 'Never push without Brandon approval', lastUpdated: '2026-02-15' },
       { id: 'rep-hubs', name: 'Rep Hubs', status: 'paused', description: 'Rep agency index and hubs', agents: ['desktop-rook'], cronJobs: [], workflows: [], tasks: [], notes: 'Index file built, paused', lastUpdated: '2026-02-10' },
-      { id: 'crossing-tool', name: 'Crossing Tool', status: 'building', description: 'Product cross-reference tool — ground-up rebuild', agents: ['desktop-rook'], cronJobs: [], workflows: [], tasks: [{ text: 'Data mining phase planning', done: false, priority: 'high' }, { text: 'AI backend architecture', done: false, priority: 'high' }], notes: 'Needs ground-up re-plan with AI backend', lastUpdated: '2026-02-14', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Crossing%20Tool/index.html' },
-      { id: 'gen-guide', name: 'Generation Guide', status: 'testing', description: 'Product generation/lineup guide tool', agents: ['desktop-rook'], cronJobs: [], workflows: [], tasks: [{ text: 'Waiting on Brandon feedback', done: false }], notes: 'In testing', lastUpdated: '2026-02-14', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Generation%20Guide/index.html' },
+      { id: 'crossing-tool', name: 'Crossing Tool', status: 'planning', description: 'Product cross-reference tool — ground-up rebuild', agents: ['desktop-rook'], cronJobs: [], workflows: [], tasks: [{ text: 'Data mining phase planning', done: false, priority: 'high' }, { text: 'AI backend architecture', done: false, priority: 'high' }], notes: 'Needs ground-up re-plan with AI backend', lastUpdated: '2026-02-14', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Crossing%20Tool/index.html' },
+      { id: 'gen-guide', name: 'Generation Guide', status: 'deployed', description: 'Product generation/lineup guide tool', agents: ['desktop-rook'], cronJobs: [], workflows: [], tasks: [{ text: 'Waiting on Brandon feedback', done: false }], notes: 'In testing', lastUpdated: '2026-02-14', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Generation%20Guide/index.html' },
       // Homepage Redesign — ABORTED Feb 16
       { id: 'inventory-mgmt', name: 'Inventory Management Tool', status: 'building', description: 'Flag low stock, prioritize by market importance', agents: ['desktop-rook'], cronJobs: [], workflows: [], tasks: [{ text: 'Build low-stock flagging', done: false, priority: 'high' }], notes: 'Currently being built', lastUpdated: '2026-02-15' },
     ]
@@ -921,7 +915,7 @@ const DOMAINS = [
       {
         id: 'btc-signal-intel',
         name: 'BTC Signal Intelligence',
-        status: 'live',
+        status: 'deployed',
         description: 'Data collection, strategy development, and signal generation pipeline for BTC trading',
         agents: ['desktop-rook', 'cloud-rook', 'scout'],
         cronJobs: ['Pull Scout Report'],
@@ -957,7 +951,7 @@ const DOMAINS = [
       {
         id: 'crypto-intel',
         name: 'Crypto Intel System',
-        status: 'live',
+        status: 'deployed',
         description: 'Portfolio price tracking + sentiment analysis for 20 tokens',
         agents: ['desktop-rook'],
         cronJobs: ['Morning Crypto Intel', 'Afternoon Crypto Intel'],
@@ -976,7 +970,7 @@ const DOMAINS = [
       {
         id: 'black-nova',
         name: 'BLACK/NOVA Strategy',
-        status: 'active',
+        status: 'building',
         description: '3M veBLACK + SuperNova ETH expansion + 40 Acres lending strategy',
         agents: ['desktop-rook'],
         cronJobs: ['Black Hole Voting', 'Elevate & UFO Check'],
@@ -994,7 +988,7 @@ const DOMAINS = [
       {
         id: 'lp-education',
         name: 'LP Education',
-        status: 'built',
+        status: 'deployed',
         description: 'Liquidity provisioning study guide for Blackhole/SuperNova',
         agents: ['desktop-rook'],
         cronJobs: [],
@@ -1013,7 +1007,7 @@ const DOMAINS = [
       {
         id: 'camarie',
         name: 'Camarie Photography',
-        status: 'queued',
+        status: 'planning',
         description: 'Email automation + SMS campaigns',
         agents: [],
         cronJobs: [],
@@ -1049,7 +1043,7 @@ const DOMAINS = [
       {
         id: 'llm-cost',
         name: 'LLM Cost Optimization',
-        status: 'planned',
+        status: 'planning',
         description: 'Research cheaper models for routine tasks',
         agents: ['desktop-rook'],
         cronJobs: [],
@@ -1073,7 +1067,7 @@ const DOMAINS = [
       {
         id: 'wake-on-lan',
         name: 'Wake-on-LAN Setup',
-        status: 'queued',
+        status: 'planning',
         description: 'Enable remote PC wake from phone',
         agents: ['desktop-rook'],
         cronJobs: [],
@@ -1089,7 +1083,7 @@ const DOMAINS = [
       {
         id: 'cloud-rook-maintenance',
         name: 'Cloud Rook Maintenance',
-        status: 'active',
+        status: 'building',
         description: 'VPS management, updates, SSH access',
         agents: ['desktop-rook', 'cloud-rook'],
         cronJobs: [],
@@ -1111,7 +1105,7 @@ const DOMAINS = [
       {
         id: 'power-track-tool',
         name: 'Power Track Tool',
-        status: 'planned',
+        status: 'planning',
         description: 'Power consumption tracking and analysis — most complex build in the portfolio',
         agents: [],
         cronJobs: [],
@@ -1380,8 +1374,8 @@ function allProjects() {
 
 function renderOverview() {
   const projects = allProjects();
-  const liveCount = projects.filter(p => p.status === 'live').length;
-  const activeCount = projects.filter(p => ['active','building','testing'].includes(p.status)).length;
+  const liveCount = projects.filter(p => p.status === 'deployed').length;
+  const activeCount = projects.filter(p => ['building','planning'].includes(p.status)).length;
   const cronCount = liveData.cronJobs.length || 6;
   const memCount = MEMORY_FILES.length;
   const wfCount = getAllWorkflows().length;
@@ -1516,8 +1510,8 @@ function renderProjects() {
     DOMAINS.forEach(d => {
       let projects = d.projects;
       if (projectFilter !== 'all') projects = projects.filter(p => p.status === projectFilter);
-      const liveCount = d.projects.filter(p => p.status === 'live').length;
-      const activeCount = d.projects.filter(p => ['active','building','testing'].includes(p.status)).length;
+      const liveCount = d.projects.filter(p => p.status === 'deployed').length;
+      const activeCount = d.projects.filter(p => ['building','planning'].includes(p.status)).length;
       const totalWorkflows = d.projects.reduce((s, p) => s + (p.workflows ? p.workflows.length : 0), 0);
       const totalAgents = [...new Set(d.projects.flatMap(p => p.agents || []))].length;
       const pendingTasks = d.projects.reduce((s, p) => s + p.tasks.filter(t => !t.done).length, 0);
@@ -1549,15 +1543,9 @@ function renderProjects() {
     if (projectFilter !== 'all') projects = projects.filter(p => p.status === projectFilter);
 
     const statusOrder = [
-      { key: 'live', label: '🟢 Live & Operational' },
-      { key: 'active', label: '🔵 Active' },
+      { key: 'deployed', label: '🟢 Deployed' },
       { key: 'building', label: '🔨 Building' },
-      { key: 'testing', label: '🧪 Testing' },
-      { key: 'concept', label: '💡 Concept' },
-      { key: 'built', label: '✅ Built' },
-      { key: 'planned', label: '📋 Planned' },
-      { key: 'queued', label: '⏳ Queued' },
-      { key: 'maintenance', label: '🔧 Maintenance' },
+      { key: 'planning', label: '📋 Planning' },
       { key: 'paused', label: '⏸️ Paused' },
     ];
 
