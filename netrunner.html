@@ -875,9 +875,9 @@ const AGENTS = [
     mdFiles: ['SOUL.md','IDENTITY.md','AGENTS.md','USER.md','MEMORY.md','TOOLS.md','HEARTBEAT.md'],
   },
   {
-    id: 'cloud-rook',
-    name: 'Cloud Rook',
-    icon: '♜',
+    id: 'dunk',
+    name: 'Dunk',
+    icon: '♞',
     model: 'claude-sonnet-4-20250514',
     host: '138.197.64.68 (DigitalOcean)',
     version: 'unknown',
@@ -935,10 +935,10 @@ const DOMAINS = [
         name: 'BTC Signal Intelligence',
         status: 'deployed',
         description: 'Data collection, strategy development, and signal generation pipeline for BTC trading',
-        agents: ['desktop-rook', 'cloud-rook', 'scout'],
+        agents: ['desktop-rook', 'dunk', 'scout'],
         cronJobs: ['Pull Scout Report'],
         workflows: [
-          { name: 'Scout Daily Analysis', schedule: 'Daily 8:00 AM', agent: 'cloud-rook', output: 'Trade report + recommendations', dependsOn: null, lastRun: 'Feb 15 8:00 AM', lastStatus: 'completed' },
+          { name: 'Scout Daily Analysis', schedule: 'Daily 8:00 AM', agent: 'dunk', output: 'Trade report + recommendations', dependsOn: null, lastRun: 'Feb 15 8:00 AM', lastStatus: 'completed' },
           { name: 'Pull Scout Report', schedule: 'Daily 8:30 AM', agent: 'desktop-rook', output: 'Local copy + Telegram summary', dependsOn: 'Scout Daily Analysis', lastRun: 'Feb 15 8:30 AM', lastStatus: 'completed' },
         ],
         tasks: [
@@ -1103,7 +1103,7 @@ const DOMAINS = [
         name: 'Cloud Rook Maintenance',
         status: 'building',
         description: 'VPS management, updates, SSH access',
-        agents: ['desktop-rook', 'cloud-rook'],
+        agents: ['desktop-rook', 'dunk'],
         cronJobs: [],
         workflows: [],
         tasks: [
@@ -1373,7 +1373,7 @@ function agentName(id) {
 }
 
 function agentTag(id) {
-  const cls = id === 'desktop-rook' ? 'tag-desktop' : id === 'cloud-rook' ? 'tag-cloud' : 'tag-scout';
+  const cls = id === 'desktop-rook' ? 'tag-desktop' : id === 'dunk' ? 'tag-cloud' : 'tag-scout';
   return `<span class="timeline-agent-tag ${cls}">${agentName(id)}</span>`;
 }
 
@@ -1841,8 +1841,8 @@ function renderWorkflows() {
       html += `<div class="weekly-day"><div class="weekly-day-name">${day}</div>`;
       // Daily workflows
       allWf.filter(w => w.schedule.startsWith('Daily')).forEach(w => {
-        const agentCls = w.agent === 'desktop-rook' ? 'tag-desktop' : w.agent === 'cloud-rook' ? 'tag-cloud' : 'tag-scout';
-        const bg = w.agent === 'desktop-rook' ? 'var(--teal-glow)' : w.agent === 'cloud-rook' ? 'var(--purple-dim)' : 'var(--green-dim)';
+        const agentCls = w.agent === 'desktop-rook' ? 'tag-desktop' : w.agent === 'dunk' ? 'tag-cloud' : 'tag-scout';
+        const bg = w.agent === 'desktop-rook' ? 'var(--teal-glow)' : w.agent === 'dunk' ? 'var(--purple-dim)' : 'var(--green-dim)';
         const timeMatch = w.schedule.match(/(\d+:\d+)/);
         const t = timeMatch ? timeMatch[0] : '';
         html += `<div class="weekly-event" style="background:${bg}" title="${w.name} — ${w.projectName}">${t} ${w.name.split(' ').slice(0,2).join(' ')}</div>`;
