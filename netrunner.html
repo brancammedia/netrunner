@@ -1408,51 +1408,56 @@ function renderOverview() {
     <div class="stat-card"><div class="stat-value">${liveData.health.version || '2026.2.14'}</div><div class="stat-label">OpenClaw</div></div>
   </div>
 
-  <div class="section-title">Weekly Priorities — Feb 16-22</div>
-  <div class="card" style="padding:16px">
-    <div style="display:flex;flex-direction:column;gap:10px">
-      ${[
-        { num: 1, name: 'Portor Inventory Tool', domain: '🏭', note: 'Fine-tune categories, set min thresholds & reorder qty, import monthly run rate', color: 'var(--red)' },
-        { num: 2, name: 'Portor Remotion Marketing Video', domain: '🏭', note: 'Marketing video build', color: 'var(--red)' },
-        { num: 3, name: 'Portor Cross Tool', domain: '🏭', note: 'Back to planning → kick off data mining', color: 'var(--amber)' },
-        { num: 4, name: 'Trading Engine', domain: '📈', note: 'Dial in Desktop/Cloud workflow', color: 'var(--amber)' },
-        { num: 5, name: 'Rook Ops (Netrunner)', domain: '♜', note: 'All enhancements, especially NR', color: 'var(--blue)' },
-        { num: 6, name: 'Crypto Intel Tools', domain: '🪙', note: 'Fine tuning reliability & output', color: 'var(--slate)' },
-      ].map(p => `
-        <div style="display:flex;align-items:center;gap:12px;padding:8px 12px;background:var(--bg);border-radius:8px;border-left:3px solid ${p.color}">
-          <span style="font-family:var(--font-mono);font-weight:700;font-size:1.1rem;color:${p.color};min-width:24px">${p.num}</span>
-          <span style="font-size:1rem">${p.domain}</span>
-          <div style="flex:1">
-            <div style="font-weight:600;font-size:0.9rem">${p.name}</div>
-            <div style="font-size:0.75rem;color:var(--text-dim)">${p.note}</div>
-          </div>
+  <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;align-items:start">
+    <div>
+      <div class="section-title">Weekly Priorities — Feb 16-22</div>
+      <div class="card" style="padding:16px">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          ${[
+            { num: 1, name: 'Portor Inventory Tool', domain: '🏭', note: 'Fine-tune categories, set min thresholds & reorder qty, import monthly run rate', color: 'var(--red)' },
+            { num: 2, name: 'Portor Remotion Marketing Video', domain: '🏭', note: 'Marketing video build', color: 'var(--red)' },
+            { num: 3, name: 'Portor Cross Tool', domain: '🏭', note: 'Back to planning → kick off data mining', color: 'var(--amber)' },
+            { num: 4, name: 'Trading Engine', domain: '📈', note: 'Dial in Desktop/Cloud workflow', color: 'var(--amber)' },
+            { num: 5, name: 'Rook Ops (Netrunner)', domain: '♜', note: 'All enhancements, especially NR', color: 'var(--blue)' },
+            { num: 6, name: 'Crypto Intel Tools', domain: '🪙', note: 'Fine tuning reliability & output', color: 'var(--slate)' },
+          ].map(p => `
+            <div style="display:flex;align-items:center;gap:12px;padding:8px 12px;background:var(--bg);border-radius:8px;border-left:3px solid ${p.color}">
+              <span style="font-family:var(--font-mono);font-weight:700;font-size:1.1rem;color:${p.color};min-width:24px">${p.num}</span>
+              <span style="font-size:1rem">${p.domain}</span>
+              <div style="flex:1">
+                <div style="font-weight:600;font-size:0.9rem">${p.name}</div>
+                <div style="font-size:0.75rem;color:var(--text-dim)">${p.note}</div>
+              </div>
+            </div>
+          `).join('')}
         </div>
-      `).join('')}
+      </div>
     </div>
-  </div>
-
-  <div class="section-title">Agent Status</div>
-  <div class="grid-3">
-    ${AGENTS.map(a => {
-      const pct = Math.round((a.context.used / a.context.max) * 100);
-      const barClass = pct > 80 ? 'danger' : pct > 50 ? 'warn' : '';
-      return `<div class="agent-card">
-        <div class="agent-header">
-          <span class="agent-icon">${a.icon}</span>
-          <span class="agent-name">${a.name}</span>
-          ${statusBadge(a.status)}
-        </div>
-        <div class="agent-meta">
-          <div class="agent-meta-row"><span class="agent-meta-key">Model</span><span class="agent-meta-val">${a.model}</span></div>
-          <div class="agent-meta-row"><span class="agent-meta-key">Host</span><span class="agent-meta-val">${a.host}</span></div>
-          <div class="agent-meta-row">
-            <span class="agent-meta-key">Context</span>
-            <span class="agent-meta-val">${(a.context.used/1000).toFixed(0)}k / ${(a.context.max/1000).toFixed(0)}k</span>
-          </div>
-        </div>
-        <div class="progress-bar"><div class="progress-fill ${barClass}" style="width:${pct}%"></div></div>
-      </div>`;
-    }).join('')}
+    <div>
+      <div class="section-title">Agents</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        ${AGENTS.map(a => {
+          const pct = Math.round((a.context.used / a.context.max) * 100);
+          const barClass = pct > 80 ? 'danger' : pct > 50 ? 'warn' : '';
+          return `<div class="card" style="padding:14px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+              <span style="font-size:1.3rem">${a.icon}</span>
+              <span class="agent-name">${a.name}</span>
+              ${statusBadge(a.status)}
+            </div>
+            <div class="agent-meta" style="margin-bottom:8px">
+              <div class="agent-meta-row"><span class="agent-meta-key">Model</span><span class="agent-meta-val">${a.model}</span></div>
+              <div class="agent-meta-row"><span class="agent-meta-key">Host</span><span class="agent-meta-val">${a.host}</span></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+              <span class="agent-meta-key">Context</span>
+              <span style="font-size:0.7rem;color:var(--text-dim)">${pct}%</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill ${barClass}" style="width:${pct}%"></div></div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
   </div>
 
   <div class="section-title">Today's Timeline</div>
