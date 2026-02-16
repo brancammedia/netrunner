@@ -1543,10 +1543,10 @@ function renderProjects() {
     if (projectFilter !== 'all') projects = projects.filter(p => p.status === projectFilter);
 
     const statusOrder = [
-      { key: 'deployed', label: '🟢 Deployed' },
       { key: 'building', label: '🔨 Building' },
       { key: 'planning', label: '📋 Planning' },
       { key: 'paused', label: '⏸️ Paused' },
+      { key: 'deployed', label: '🟢 Deployed' },
     ];
 
     let sectionsHtml = '';
