@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>NETRUNNER v3 — AI Operations Command Center</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -919,7 +922,7 @@ const DOMAINS = [
       { id: 'support', name: 'Support', status: 'deployed', description: 'Support resources portal', agents: [], cronJobs: [], workflows: [], tasks: [], notes: '', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Support/index.html' },
       { id: 'cloud-functions', name: 'Cloud Functions (Backend)', status: 'deployed', description: 'GCP Cloud Functions powering all tools', agents: ['desktop-rook'], cronJobs: [], workflows: [], tasks: [], notes: 'Never push without Brandon approval', lastUpdated: '2026-02-15' },
       { id: 'rep-hubs', name: 'Rep Hubs', status: 'paused', description: 'Rep agency index and hubs', agents: ['desktop-rook'], cronJobs: [], workflows: [], tasks: [], notes: 'Index file built, paused', lastUpdated: '2026-02-10', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Rep%20Hubs/Lumenation/index.html' },
-      { id: 'crossing-tool', name: 'Crossing Tool', status: 'planning', description: 'Product cross-reference tool — ground-up rebuild', agents: ['desktop-rook'], cronJobs: [], workflows: [], tasks: [{ text: 'Data mining phase planning', done: false, priority: 'high' }, { text: 'AI backend architecture', done: false, priority: 'high' }], notes: 'Needs ground-up re-plan with AI backend', lastUpdated: '2026-02-14', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Crossing%20Tool/index.html' },
+      { id: 'crossing-tool', name: 'Crossing Tool', status: 'building', description: 'Product cross-reference tool — data foundation built, PDF spec extraction in progress', agents: ['desktop-rook', 'codex'], cronJobs: [], workflows: [], tasks: [{ text: 'Data foundation v2 (389 fixtures enhanced)', done: true, priority: 'high' }, { text: 'PDF spec extraction for voltage/IP gaps', done: false, priority: 'high' }, { text: 'AI backend architecture', done: false, priority: 'high' }], notes: 'Codex built data foundation (v2). PDF extractor script ready — Codex running next. Voltage 54.8%, IP 28.5%, targeting 90%+ and 70%+.', lastUpdated: '2026-02-17', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Crossing%20Tool/index.html' },
       { id: 'gen-guide', name: 'Generation Guide', status: 'deployed', description: 'Product generation/lineup guide tool', agents: ['desktop-rook'], cronJobs: [], workflows: [], tasks: [{ text: 'Waiting on Brandon feedback', done: false }], notes: 'In testing', lastUpdated: '2026-02-14', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Generation%20Guide/index.html' },
       // Homepage Redesign — ABORTED Feb 16
       { id: 'inventory-mgmt', name: 'Inventory Management Tool', status: 'building', description: 'Flag low stock, prioritize by market importance', agents: ['desktop-rook'], cronJobs: [], workflows: [], tasks: [{ text: 'Build low-stock flagging', done: false, priority: 'high' }], notes: 'Currently being built', lastUpdated: '2026-02-15', link: 'file:///C:/Users/owner/Desktop/Portor%20Tools%20Main%20Important/Louisville%20Replenishment/index.html' },
@@ -1416,10 +1419,11 @@ function renderOverview() {
           ${[
             { num: 1, name: 'Portor Inventory Tool', domain: '🏭', note: 'Fine-tune categories, set min thresholds & reorder qty, import monthly run rate', color: 'var(--red)' },
             { num: 2, name: 'Portor Remotion Marketing Video', domain: '🏭', note: 'Marketing video build', color: 'var(--red)' },
-            { num: 3, name: 'Portor Cross Tool', domain: '🏭', note: 'Back to planning → kick off data mining', color: 'var(--amber)' },
+            { num: 3, name: 'Portor Cross Tool', domain: '🏭', note: 'Building → PDF spec extraction running, data foundation v2 done', color: 'var(--amber)' },
             { num: 4, name: 'Trading Engine', domain: '📈', note: 'Dial in Desktop/Cloud workflow', color: 'var(--amber)' },
             { num: 5, name: 'Rook Ops (Netrunner)', domain: '♜', note: 'All enhancements, especially NR', color: 'var(--blue)' },
             { num: 6, name: 'Crypto Intel Tools', domain: '🪙', note: 'Fine tuning reliability & output', color: 'var(--slate)' },
+            { num: 7, name: 'Camarie Photography', domain: '📸', note: 'Email automation + SMS campaigns — block 2 hrs', color: 'var(--slate)' },
           ].map(p => `
             <div style="display:flex;align-items:center;gap:12px;padding:8px 12px;background:var(--bg);border-radius:8px;border-left:3px solid ${p.color}">
               <span style="font-family:var(--font-mono);font-weight:700;font-size:1.1rem;color:${p.color};min-width:24px">${p.num}</span>
