@@ -1427,16 +1427,16 @@ function renderOverview() {
             { num: 1, name: 'Portor Inventory Tool', domain: '🏭', note: 'Fine-tune categories, set min thresholds & reorder qty, import monthly run rate', color: 'var(--red)' },
             { num: 2, name: 'Portor Remotion Marketing Video', domain: '🏭', note: 'Marketing video build', color: 'var(--red)' },
             { num: 3, name: 'Portor Cross Tool', domain: '🏭', note: 'Building → PDF spec extraction running, data foundation v2 done', color: 'var(--amber)' },
-            { num: 4, name: 'Trading Engine ⏳', domain: '📈', note: 'Data collection — revisit March', color: 'var(--slate)' },
-            { num: 5, name: 'Rook Ops (Netrunner)', domain: '♜', note: 'All enhancements, especially NR', color: 'var(--blue)' },
-            { num: 6, name: 'Crypto Intel Tools', domain: '🪙', note: 'Fine tuning reliability & output', color: 'var(--slate)' },
-            { num: 7, name: 'Camarie Photography', domain: '📸', note: 'Email automation + SMS campaigns — block 2 hrs', color: 'var(--slate)' },
+            { num: 4, name: 'Rook Ops (Netrunner)', domain: '♜', note: 'All enhancements, especially NR', color: 'var(--blue)' },
+            { num: 5, name: 'Crypto Intel Tools', domain: '🪙', note: 'Fine tuning reliability & output', color: 'var(--slate)' },
+            { num: 6, name: 'Camarie Photography', domain: '📸', note: 'Email automation + SMS campaigns — block 2 hrs', color: 'var(--slate)' },
+            { num: 7, name: 'Trading Engine', domain: '📈', note: 'Data collection — revisit March', color: 'var(--slate)', tag: '⏳ DATA COLLECTION' },
           ].map(p => `
             <div style="display:flex;align-items:center;gap:12px;padding:8px 12px;background:var(--bg);border-radius:8px;border-left:3px solid ${p.color}">
               <span style="font-family:var(--font-mono);font-weight:700;font-size:1.1rem;color:${p.color};min-width:24px">${p.num}</span>
               <span style="font-size:1rem">${p.domain}</span>
               <div style="flex:1">
-                <div style="font-weight:600;font-size:0.9rem">${p.name}</div>
+                <div style="display:flex;align-items:center;gap:8px"><span style="font-weight:600;font-size:0.9rem">${p.name}</span>${p.tag ? `<span style="background:#b8860b;color:#fff;font-size:0.6rem;padding:1px 6px;border-radius:3px;font-family:var(--font-mono);letter-spacing:0.5px">${p.tag}</span>` : ''}</div>
                 <div style="font-size:0.75rem;color:var(--text-dim)">${p.note}</div>
               </div>
             </div>
