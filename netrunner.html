@@ -942,7 +942,8 @@ const DOMAINS = [
         id: 'btc-signal-intel',
         name: 'BTC Signal Intelligence',
         status: 'deployed',
-        description: 'Data collection, strategy development, and signal generation pipeline for BTC trading',
+        tag: '⏳ DATA COLLECTION',
+        description: 'Live on VPS — accumulating signal data. Revisit for execution layer in March.',
         agents: ['desktop-rook', 'dunk', 'scout'],
         cronJobs: ['Pull Scout Report'],
         workflows: [
@@ -961,8 +962,9 @@ const DOMAINS = [
       {
         id: 'trading-bot',
         name: 'Trading Bot',
-        status: 'building',
-        description: 'Automated trade execution — consumes BTC Signal Intelligence output',
+        status: 'paused',
+        tag: '⏳ DATA COLLECTION',
+        description: 'Waiting on 2-3 weeks of Scout signal data before building copy trading execution layer. Revisit March.',
         agents: ['desktop-rook'],
         cronJobs: [],
         workflows: [],
@@ -1425,7 +1427,7 @@ function renderOverview() {
             { num: 1, name: 'Portor Inventory Tool', domain: '🏭', note: 'Fine-tune categories, set min thresholds & reorder qty, import monthly run rate', color: 'var(--red)' },
             { num: 2, name: 'Portor Remotion Marketing Video', domain: '🏭', note: 'Marketing video build', color: 'var(--red)' },
             { num: 3, name: 'Portor Cross Tool', domain: '🏭', note: 'Building → PDF spec extraction running, data foundation v2 done', color: 'var(--amber)' },
-            { num: 4, name: 'Trading Engine', domain: '📈', note: 'Dial in Desktop/Cloud workflow', color: 'var(--amber)' },
+            { num: 4, name: 'Trading Engine ⏳', domain: '📈', note: 'Data collection — revisit March', color: 'var(--slate)' },
             { num: 5, name: 'Rook Ops (Netrunner)', domain: '♜', note: 'All enhancements, especially NR', color: 'var(--blue)' },
             { num: 6, name: 'Crypto Intel Tools', domain: '🪙', note: 'Fine tuning reliability & output', color: 'var(--slate)' },
             { num: 7, name: 'Camarie Photography', domain: '📸', note: 'Email automation + SMS campaigns — block 2 hrs', color: 'var(--slate)' },
@@ -1623,6 +1625,7 @@ function renderProjectCard(p, domain) {
     <div class="project-card-top" onclick="toggleProject('${p.id}')">
       <span class="project-name">${statusEmoji(p.status)} ${p.name}</span>
       <div style="display:flex;align-items:center;gap:8px">
+        ${p.tag ? `<span style="background:#b8860b;color:#fff;font-size:0.65rem;padding:2px 8px;border-radius:4px;font-family:var(--font-mono);letter-spacing:0.5px">${p.tag}</span>` : ''}
         ${statusBadge(p.status)}
         <span style="color:var(--text-muted);font-size:0.75rem">${isExpanded ? '▲' : '▼'}</span>
       </div>
