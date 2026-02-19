@@ -811,6 +811,59 @@ body {
 .file-modal-body pre { white-space:pre-wrap; word-wrap:break-word; font-family:var(--font-mono); font-size:0.78rem; line-height:1.6; color:var(--text-dim); }
 .md-file-btn { background:var(--bg-input); border:1px solid var(--border); color:var(--text-dim); padding:4px 10px; border-radius:5px; font-family:var(--font-mono); font-size:0.72rem; cursor:pointer; transition:all 0.2s; }
 .md-file-btn:hover { border-color:var(--teal-dim); color:var(--teal); background:var(--teal-glow); }
+
+/* === KANBAN BOARD === */
+.kanban-board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.kanban-column { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 12px; min-height: 300px; }
+.kanban-column.drag-over { border-color: var(--teal); background: var(--teal-glow); }
+.kanban-col-header { font-family: var(--font-mono); font-size: 0.75rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+.kanban-col-count { background: var(--border); color: var(--text-dim); padding: 2px 8px; border-radius: 10px; font-size: 0.68rem; }
+.kanban-card { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 12px; margin-bottom: 8px; cursor: grab; transition: all 0.15s; }
+.kanban-card:hover { border-color: var(--border-light); background: var(--bg-card-hover); }
+.kanban-card.dragging { opacity: 0.5; transform: rotate(2deg); }
+.kanban-card-title { font-family: var(--font-mono); font-size: 0.82rem; font-weight: 500; margin-bottom: 6px; }
+.kanban-card-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; color: var(--text-muted); }
+.kanban-card-assignee { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-dim); }
+.kanban-priority { font-family: var(--font-mono); font-size: 0.6rem; padding: 1px 6px; border-radius: 3px; text-transform: uppercase; font-weight: 600; }
+.kanban-priority.high { background: var(--red-dim); color: var(--red); }
+.kanban-priority.med { background: var(--amber-dim); color: var(--amber); }
+.kanban-priority.low { background: var(--slate-dim); color: var(--slate); }
+
+/* === CRON CALENDAR === */
+.cal-grid { display: grid; grid-template-columns: 60px repeat(7, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.cal-header-cell { background: var(--bg-card); border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); padding: 10px 8px; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); text-align: center; }
+.cal-time-cell { background: var(--bg-card); border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); padding: 6px 8px; font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-muted); text-align: right; min-height: 48px; display: flex; align-items: center; justify-content: flex-end; }
+.cal-cell { background: var(--bg); border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); padding: 4px; min-height: 48px; position: relative; }
+.cal-cell:last-child { border-right: none; }
+.cal-event { font-family: var(--font-mono); font-size: 0.62rem; padding: 3px 6px; border-radius: 3px; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 4px; }
+.cal-legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; padding: 12px 16px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; }
+.cal-legend-item { display: flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-dim); }
+.cal-legend-dot { width: 10px; height: 10px; border-radius: 3px; }
+
+/* === TEAM CARDS === */
+.team-section-title { font-family: var(--font-mono); font-size: 0.75rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 12px; margin-top: 24px; }
+.team-section-title:first-child { margin-top: 0; }
+.team-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 20px; transition: border-color 0.2s; }
+.team-card:hover { border-color: var(--border-light); }
+.team-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.team-card-icon { font-size: 2rem; }
+.team-card-name { font-family: var(--font-mono); font-weight: 700; font-size: 1.1rem; }
+.team-card-title { font-size: 0.78rem; color: var(--teal); font-family: var(--font-mono); }
+.team-card-meta { font-size: 0.78rem; color: var(--text-dim); }
+.team-card-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--border); }
+.team-card-row:last-child { border-bottom: none; }
+.team-card-key { color: var(--text-muted); font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.team-card-val { color: var(--text); font-family: var(--font-mono); font-size: 0.78rem; }
+.spawn-btn { display: block; width: 100%; margin-top: 12px; padding: 8px 0; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-muted); font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; text-align: center; cursor: pointer; transition: all 0.25s; }
+.spawn-btn:hover { border-color: var(--teal); color: var(--teal); background: var(--teal-glow); }
+
+@media (max-width: 1024px) {
+  .kanban-board { grid-template-columns: repeat(2, 1fr); }
+  .cal-grid { font-size: 0.6rem; }
+}
+@media (max-width: 768px) {
+  .kanban-board { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
@@ -838,6 +891,9 @@ body {
   <div class="nav-tab" data-tab="skills"><span class="tab-key">5</span>Skills</div>
   <div class="nav-tab" data-tab="memory"><span class="tab-key">6</span>Memory</div>
   <div class="nav-tab" data-tab="config"><span class="tab-key">7</span>Config</div>
+  <div class="nav-tab" data-tab="tasks"><span class="tab-key">8</span>Tasks</div>
+  <div class="nav-tab" data-tab="calendar"><span class="tab-key">9</span>Calendar</div>
+  <div class="nav-tab" data-tab="team"><span class="tab-key">0</span>Team</div>
 </nav>
 
 <!-- MAIN -->
@@ -849,6 +905,9 @@ body {
   <div id="tab-skills" class="tab-content"></div>
   <div id="tab-memory" class="tab-content"></div>
   <div id="tab-config" class="tab-content"></div>
+  <div id="tab-tasks" class="tab-content"></div>
+  <div id="tab-calendar" class="tab-content"></div>
+  <div id="tab-team" class="tab-content"></div>
 </div>
 
 <script>
@@ -1260,6 +1319,52 @@ function saveOverrides() {
 }
 
 // ============================================================
+// TASKS DATA
+// ============================================================
+
+const TASKS = [
+  { id: 1, title: 'Fix xAI sentiment timeouts', assignee: 'Rook', priority: 'high', status: 'backlog', created: '2026-02-14' },
+  { id: 2, title: 'Portor Cross Tool data cleaning', assignee: 'Rook', priority: 'high', status: 'backlog', created: '2026-02-15' },
+  { id: 3, title: 'Fix Netrunner nightly refresh cron', assignee: 'Rook', priority: 'med', status: 'backlog', created: '2026-02-16' },
+  { id: 4, title: 'Fix embedding API key for memory_search', assignee: 'Rook', priority: 'low', status: 'backlog', created: '2026-02-10' },
+  { id: 5, title: 'LLM cost optimization research', assignee: 'Rook', priority: 'low', status: 'backlog', created: '2026-02-14' },
+  { id: 6, title: 'Camarie Photography email automation', assignee: 'Rook', priority: 'low', status: 'backlog', created: '2026-02-01' },
+  { id: 7, title: 'SuperNova LP monitoring', assignee: 'Rook', priority: 'high', status: 'inprogress', created: '2026-02-16' },
+  { id: 8, title: 'Portor clearance page Divi update', assignee: 'Rook', priority: 'med', status: 'inprogress', created: '2026-02-17' },
+  { id: 9, title: 'Clearance tool spec URL matching — 46 products mapped', assignee: 'Brandon', priority: 'med', status: 'review', created: '2026-02-16' },
+  { id: 10, title: '12 tariff holdout decision', assignee: 'Brandon', priority: 'med', status: 'review', created: '2026-02-17' },
+  { id: 11, title: 'Memory system restructure', assignee: 'Rook', priority: 'med', status: 'done', created: '2026-02-12' },
+  { id: 12, title: 'Portor Health Check cron', assignee: 'Rook', priority: 'med', status: 'done', created: '2026-02-13' },
+  { id: 13, title: 'Codex Task V3 deliverables', assignee: 'Rook', priority: 'med', status: 'done', created: '2026-02-15' },
+  { id: 14, title: 'BTC Market Analysis cron', assignee: 'Rook', priority: 'med', status: 'done', created: '2026-02-14' },
+  { id: 15, title: "Rook's Gambit cron", assignee: 'Rook', priority: 'med', status: 'done', created: '2026-02-14' },
+];
+
+const CRON_SCHEDULE = [
+  { name: 'Morning Crypto Intel', time: '07:00', days: 'daily', color: 'var(--teal)', colorDim: 'var(--teal-glow)', lastOk: true },
+  { name: 'BTC Market Analysis', time: '07:00', days: 'daily', color: 'var(--blue)', colorDim: 'var(--blue-dim)', lastOk: true },
+  { name: "Rook's Gambit Briefing", time: '07:30', days: 'daily', color: 'var(--purple)', colorDim: 'var(--purple-dim)', lastOk: true },
+  { name: 'Portor Health Check', time: '07:30', days: 'daily', color: 'var(--green)', colorDim: 'var(--green-dim)', lastOk: true },
+  { name: 'Pull Scout Report', time: '08:30', days: 'daily', color: 'var(--cyan)', colorDim: 'var(--cyan-dim)', lastOk: true },
+  { name: 'Afternoon Crypto Intel', time: '16:00', days: 'daily', color: 'var(--teal)', colorDim: 'var(--teal-glow)', lastOk: true },
+  { name: 'Black Hole Voting', time: '16:45', days: [3], color: 'var(--amber)', colorDim: 'var(--amber-dim)', lastOk: true },
+  { name: 'Elevate & UFO Check', time: '10:00', days: [1], color: 'var(--pink)', colorDim: 'var(--pink-dim)', lastOk: true },
+  { name: 'Weekly System Review', time: '15:00', days: [5], color: 'var(--purple)', colorDim: 'var(--purple-dim)', lastOk: true },
+  { name: 'Nightly Memory Save', time: '02:00', days: 'daily', color: 'var(--slate)', colorDim: 'var(--slate-dim)', lastOk: true },
+  { name: 'Netrunner Nightly Refresh', time: '03:00', days: 'daily', color: 'var(--red)', colorDim: 'var(--red-dim)', lastOk: false },
+];
+
+const TEAM = [
+  { name: 'Rook', icon: '♜', title: 'Chief Operator', host: 'WSL2 Desktop', status: 'online', role: 'Interactive work, GCP deployments, project management', core: true, currentTask: 'Netrunner v3 build', lastActive: 'Now' },
+  { name: 'Dunk', icon: '♞', title: 'Field Agent', host: 'VPS 138.197.64.68', status: 'online', role: '24/7 monitoring, scheduled tasks, weather', core: true, currentTask: 'Cron execution', lastActive: 'Now' },
+  { name: 'Scout', icon: '♟️', title: 'Trading Analyst', host: 'VPS', status: 'active', role: 'Daily 8 AM trading analysis, signal generation', core: true, currentTask: null, lastActive: '8:30 AM today' },
+  { name: 'Builder', icon: '🔨', title: 'Developer', host: null, status: 'idle', role: 'Codex/coding tasks, script creation, tool builds', core: false, currentTask: null, lastActive: '2026-02-17' },
+  { name: 'Researcher', icon: '🔍', title: 'Analyst', host: null, status: 'idle', role: 'Web scraping, data analysis, competitive intel', core: false, currentTask: null, lastActive: '2026-02-15' },
+  { name: 'Writer', icon: '✍️', title: 'Content', host: null, status: 'idle', role: 'Reports, briefings, documentation, communications', core: false, currentTask: null, lastActive: '2026-02-16' },
+  { name: 'Auditor', icon: '🔎', title: 'QA', host: null, status: 'idle', role: 'Code review, data validation, health checks', core: false, currentTask: null, lastActive: '2026-02-14' },
+];
+
+// ============================================================
 // WEBSOCKET
 // ============================================================
 
@@ -1349,16 +1454,17 @@ document.getElementById('nav').addEventListener('click', e => {
 document.addEventListener('keydown', e => {
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
   const num = parseInt(e.key);
-  if (num >= 1 && num <= 7) {
-    const tabs = ['overview','projects','agents','workflows','skills','memory','config'];
-    switchTab(tabs[num - 1]);
+  if (num >= 1 && num <= 9) {
+    const tabs = ['overview','projects','agents','workflows','skills','memory','config','tasks','calendar'];
+    if (tabs[num - 1]) switchTab(tabs[num - 1]);
   }
+  if (e.key === '0') { switchTab('team'); }
   if (e.key === 'r' || e.key === 'R') { renderCurrentTab(); }
   if (e.key === 't' || e.key === 'T') { toggleTheme(); }
 });
 
 function renderCurrentTab() {
-  const renderers = { overview: renderOverview, projects: renderProjects, agents: renderAgents, workflows: renderWorkflows, skills: renderSkills, memory: renderMemory, config: renderConfig };
+  const renderers = { overview: renderOverview, projects: renderProjects, agents: renderAgents, workflows: renderWorkflows, skills: renderSkills, memory: renderMemory, config: renderConfig, tasks: renderTasks, calendar: renderCalendar, team: renderTeam };
   if (renderers[currentTab]) renderers[currentTab]();
 }
 
@@ -1990,6 +2096,168 @@ function renderConfig() {
     </div>
   `).join('');
   document.getElementById('tab-config').innerHTML = html;
+}
+
+// ============================================================
+// RENDER: TASKS (Kanban)
+// ============================================================
+
+function renderTasks() {
+  const columns = [
+    { key: 'backlog', label: 'Backlog' },
+    { key: 'inprogress', label: 'In Progress' },
+    { key: 'review', label: 'Review' },
+    { key: 'done', label: 'Done' },
+  ];
+
+  let html = `<div class="kanban-board">`;
+  columns.forEach(col => {
+    const tasks = TASKS.filter(t => t.status === col.key);
+    html += `
+    <div class="kanban-column" data-col="${col.key}" ondragover="kanbanDragOver(event)" ondragleave="kanbanDragLeave(event)" ondrop="kanbanDrop(event, '${col.key}')">
+      <div class="kanban-col-header">
+        <span>${col.label}</span>
+        <span class="kanban-col-count">${tasks.length}</span>
+      </div>
+      ${tasks.map(t => `
+        <div class="kanban-card" draggable="true" data-id="${t.id}" ondragstart="kanbanDragStart(event, ${t.id})" ondragend="kanbanDragEnd(event)">
+          <div class="kanban-card-title">${t.title}</div>
+          <div class="kanban-card-meta">
+            <span class="kanban-card-assignee">${t.assignee}</span>
+            ${t.priority ? `<span class="kanban-priority ${t.priority}">${t.priority}</span>` : ''}
+          </div>
+          <div style="font-size:0.65rem;color:var(--text-muted);margin-top:4px">${t.created}</div>
+        </div>
+      `).join('')}
+    </div>`;
+  });
+  html += `</div>`;
+  document.getElementById('tab-tasks').innerHTML = html;
+}
+
+let dragTaskId = null;
+function kanbanDragStart(e, id) { dragTaskId = id; e.target.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; }
+function kanbanDragEnd(e) { e.target.classList.remove('dragging'); }
+function kanbanDragOver(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+function kanbanDragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
+function kanbanDrop(e, col) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  const task = TASKS.find(t => t.id === dragTaskId);
+  if (task) { task.status = col; renderTasks(); }
+  dragTaskId = null;
+}
+
+// ============================================================
+// RENDER: CALENDAR
+// ============================================================
+
+function renderCalendar() {
+  const now = new Date();
+  const dayOfWeek = now.getDay(); // 0=Sun
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - ((dayOfWeek + 6) % 7));
+
+  const days = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
+  const dayDates = days.map((_, i) => {
+    const d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    return d;
+  });
+
+  // Time slots to show
+  const slots = ['02:00','03:00','07:00','07:30','08:30','10:00','15:00','16:00','16:45'];
+
+  let html = `<div class="cal-grid">`;
+  // Header row
+  html += `<div class="cal-header-cell"></div>`;
+  days.forEach((day, i) => {
+    const d = dayDates[i];
+    const isToday = d.toDateString() === now.toDateString();
+    html += `<div class="cal-header-cell" style="${isToday ? 'color:var(--teal);border-bottom-color:var(--teal)' : ''}">${day} ${d.getDate()}</div>`;
+  });
+
+  // Time rows
+  slots.forEach(slot => {
+    const h = parseInt(slot.split(':')[0]);
+    const m = slot.split(':')[1];
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    const h12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
+    html += `<div class="cal-time-cell">${h12}:${m} ${ampm}</div>`;
+
+    for (let di = 0; di < 7; di++) {
+      const dayNum = di + 1; // 1=Mon
+      const events = CRON_SCHEDULE.filter(c => {
+        if (c.time !== slot) return false;
+        if (c.days === 'daily') return true;
+        if (Array.isArray(c.days)) return c.days.includes(dayNum);
+        return false;
+      });
+      html += `<div class="cal-cell">`;
+      events.forEach(ev => {
+        const statusIcon = ev.lastOk ? '✓' : '✗';
+        const statusColor = ev.lastOk ? 'var(--green)' : 'var(--red)';
+        html += `<div class="cal-event" style="background:${ev.colorDim};color:${ev.color}" title="${ev.name}">
+          <span style="color:${statusColor};font-weight:700">${statusIcon}</span>
+          ${ev.name.length > 18 ? ev.name.substring(0, 16) + '…' : ev.name}
+        </div>`;
+      });
+      html += `</div>`;
+    }
+  });
+  html += `</div>`;
+
+  // Legend
+  html += `<div class="cal-legend">`;
+  CRON_SCHEDULE.forEach(c => {
+    const statusIcon = c.lastOk ? '✓' : '✗';
+    html += `<div class="cal-legend-item">
+      <div class="cal-legend-dot" style="background:${c.color}"></div>
+      ${c.name} <span style="color:${c.lastOk ? 'var(--green)' : 'var(--red)'};font-weight:700">${statusIcon}</span>
+    </div>`;
+  });
+  html += `</div>`;
+
+  document.getElementById('tab-calendar').innerHTML = html;
+}
+
+// ============================================================
+// RENDER: TEAM
+// ============================================================
+
+function renderTeam() {
+  const core = TEAM.filter(t => t.core);
+  const pool = TEAM.filter(t => !t.core);
+
+  function teamCard(t) {
+    const statusClass = t.status === 'online' ? 'badge-online' : t.status === 'active' ? 'badge-active' : 'badge-idle';
+    return `
+    <div class="team-card">
+      <div class="team-card-header">
+        <span class="team-card-icon">${t.icon}</span>
+        <div>
+          <div class="team-card-name">${t.name}</div>
+          <div class="team-card-title">${t.title}</div>
+        </div>
+        <span class="badge ${statusClass}" style="margin-left:auto">${t.status}</span>
+      </div>
+      <div class="team-card-meta">
+        <div class="team-card-row"><span class="team-card-key">Role</span><span class="team-card-val">${t.role}</span></div>
+        ${t.host ? `<div class="team-card-row"><span class="team-card-key">Host</span><span class="team-card-val">${t.host}</span></div>` : ''}
+        <div class="team-card-row"><span class="team-card-key">Current Task</span><span class="team-card-val">${t.currentTask || '<span style="color:var(--text-muted)">—</span>'}</span></div>
+        <div class="team-card-row"><span class="team-card-key">Last Active</span><span class="team-card-val">${t.lastActive}</span></div>
+      </div>
+      ${!t.core ? '<button class="spawn-btn">⚡ Spawn Agent</button>' : ''}
+    </div>`;
+  }
+
+  let html = `
+  <div class="team-section-title">Core Team — Always Running</div>
+  <div class="grid-3">${core.map(teamCard).join('')}</div>
+  <div class="team-section-title">Sub-Agent Pool — On Demand</div>
+  <div class="grid-4">${pool.map(teamCard).join('')}</div>
+  `;
+  document.getElementById('tab-team').innerHTML = html;
 }
 
 // ============================================================

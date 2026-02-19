@@ -344,22 +344,22 @@
         icon: "ROOK",
         status: "online",
         model: "claude-opus-4-6",
-        contextUsed: 148600,
+        contextUsed: 41927,
         contextMax: 200000,
-        lastActive: "2026-02-13T20:48:00",
+        lastActive: "2026-02-18T03:00:00",
         host: "WIN-79G2697J611 (WSL2)"
       },
       {
-        id: "cloud-rook",
-        name: "Cloud Rook",
+        id: "dunk",
+        name: "Dunk",
         icon: "ROOK",
         status: "online",
         model: "claude-opus-4-6",
-        contextUsed: 35000,
+        contextUsed: 0,
         contextMax: 200000,
-        lastActive: "2026-02-13T18:29:00",
+        lastActive: "2026-02-17T20:00:00",
         host: "rook-247 (138.197.64.68)",
-        uptime: "2 days 23h"
+        uptime: "6 days 10h"
       },
       {
         id: "scout",
@@ -370,8 +370,8 @@
         contextUsed: 200000,
         contextMax: 200000,
         lastRun: "2026-02-13T08:00:00",
-        nextRun: "2026-02-14T07:00:00",
-        summary: "Context full — session cleanup scheduled 8:30 AM CST."
+        nextRun: "2026-02-18T08:30:00",
+        summary: "Context full — awaiting session cleanup."
       },
       {
         id: "signal-engine",
@@ -381,8 +381,8 @@
         model: "Node.js (headless)",
         contextUsed: 0,
         contextMax: 0,
-        lastActive: "2026-02-13T20:11:00",
-        host: "rook-247 (pm2 · PID 83222)",
+        lastActive: "2026-02-18T03:00:00",
+        host: "rook-247 (pm2 · PID 192281)",
         uptime: "Running 24/7"
       }
     ];
@@ -392,11 +392,21 @@
         label: "Desktop Rook DM",
         type: "DM",
         model: "claude-opus-4-6",
-        contextUsed: 148600,
+        contextUsed: 41927,
         contextMax: 200000,
         cost: null,
-        lastMessage: "2026-02-13T20:48:00",
+        lastMessage: "2026-02-18T02:56:00",
         channel: "Telegram"
+      },
+      {
+        label: "Netrunner Nightly Refresh",
+        type: "Cron",
+        model: "claude-opus-4-6",
+        contextUsed: 0,
+        contextMax: 200000,
+        cost: null,
+        lastMessage: "2026-02-18T03:00:00",
+        channel: "Cron"
       },
       {
         label: "Scout — Daily Analysis",
@@ -409,6 +419,16 @@
         channel: "Cron"
       },
       {
+        label: "The Rookies (Group)",
+        type: "Group",
+        model: "claude-opus-4-6",
+        contextUsed: 23643,
+        contextMax: 200000,
+        cost: null,
+        lastMessage: "2026-02-16T18:45:00",
+        channel: "Telegram"
+      },
+      {
         label: "Morning Briefing",
         type: "Cron",
         model: "claude-opus-4-6",
@@ -417,35 +437,33 @@
         cost: null,
         lastMessage: "2026-02-12T07:00:00",
         channel: "Telegram"
-      },
-      {
-        label: "The Rookies (Group)",
-        type: "Group",
-        model: "claude-opus-4-6",
-        contextUsed: 20946,
-        contextMax: 200000,
-        cost: null,
-        lastMessage: "2026-02-13T18:30:00",
-        channel: "Telegram"
       }
     ];
 
     const CRON_JOBS = [
       {
-        name: "Trade Log Sync to VPS",
-        schedule: "Daily 6:30 AM CST",
+        name: "Morning Crypto Intel",
+        schedule: "Daily 7:00 AM CST",
         enabled: true,
-        lastRun: null,
-        lastResult: null,
-        nextFire: "2026-02-14T06:30:00"
+        lastRun: "2026-02-17T07:00:00",
+        lastResult: "success",
+        nextFire: "2026-02-18T07:00:00"
       },
       {
-        name: "Scout Session Cleanup",
+        name: "Pull Scout Report",
         schedule: "Daily 8:30 AM CST",
         enabled: true,
-        lastRun: null,
-        lastResult: null,
-        nextFire: "2026-02-14T08:30:00"
+        lastRun: "2026-02-17T08:30:00",
+        lastResult: "success",
+        nextFire: "2026-02-18T08:30:00"
+      },
+      {
+        name: "Afternoon Crypto Intel",
+        schedule: "Daily 4:00 PM CST",
+        enabled: true,
+        lastRun: "2026-02-17T16:00:00",
+        lastResult: "success",
+        nextFire: "2026-02-18T16:00:00"
       },
       {
         name: "Black Hole Voting Reminder",
@@ -456,20 +474,44 @@
         nextFire: "2026-02-19T16:45:00"
       },
       {
-        name: "Signal Engine (pm2)",
-        schedule: "Every 30s (VPS)",
+        name: "Nightly Memory Save",
+        schedule: "Daily 2:00 AM CST",
         enabled: true,
-        lastRun: "2026-02-13T20:11:00",
+        lastRun: "2026-02-18T02:00:00",
         lastResult: "success",
-        nextFire: null
+        nextFire: "2026-02-19T02:00:00"
       },
       {
-        name: "Cloud Rook Session Cleanup",
-        schedule: "Every 6 hours (VPS)",
+        name: "Netrunner Nightly Refresh",
+        schedule: "Daily 3:00 AM CST",
         enabled: true,
-        lastRun: null,
-        lastResult: null,
-        nextFire: "2026-02-13T23:00:00"
+        lastRun: "2026-02-18T03:00:00",
+        lastResult: "success",
+        nextFire: "2026-02-19T03:00:00"
+      },
+      {
+        name: "Elevate & UFO/Space Check",
+        schedule: "Mon 10:00 AM CST",
+        enabled: true,
+        lastRun: "2026-02-17T10:00:00",
+        lastResult: "success",
+        nextFire: "2026-02-24T10:00:00"
+      },
+      {
+        name: "VPS Snapshot Collector",
+        schedule: "Every 4h (VPS cron)",
+        enabled: true,
+        lastRun: "2026-02-18T02:00:00",
+        lastResult: "success",
+        nextFire: "2026-02-18T04:00:00"
+      },
+      {
+        name: "Signal Engine (pm2)",
+        schedule: "Continuous (VPS)",
+        enabled: true,
+        lastRun: "2026-02-18T03:00:00",
+        lastResult: "success",
+        nextFire: null
       }
     ];
 
@@ -478,20 +520,27 @@
         {
           name: "Signal & Scalp Trading Bots",
           status: "live",
-          desc: "Live v2 — 14 strategies, 3 TFs, widest SL, no stacking bonuses.",
-          updated: "2026-02-13"
+          tag: "⏳ DATA COLLECTION",
+          desc: "Live v2 running on VPS. Accumulating signal data — revisit for execution layer in March.",
+          updated: "2026-02-18"
         },
         {
-          name: "Louisville Replenishment Dashboard",
+          name: "Portor Inventory Management",
           status: "in-progress",
-          desc: "Ontario→Louisville transfer mgmt. Tier/threshold/pallet system built. Per-SKU thresholds active.",
-          updated: "2026-02-13"
+          desc: "Flag low stock, prioritize by market importance. This week's #1 priority.",
+          updated: "2026-02-17"
         },
         {
           name: "Generation Guide Tool",
           status: "testing",
           desc: "SKU generation transition tool. Waiting on user feedback.",
           updated: "2026-02-13"
+        },
+        {
+          name: "Portor Marketing Video",
+          status: "in-progress",
+          desc: "Outsourced to Fiverr ($100). Temp portal at gs://portor-video-temp/.",
+          updated: "2026-02-17"
         }
       ],
       highPriority: [
@@ -502,18 +551,25 @@
           updated: "2026-02-13"
         },
         {
-          name: "Portor Inventory Management",
+          name: "Portor Cross Tool",
           status: "in-progress",
-          desc: "Notes column added for gen transitions. Needs GCS deploy.",
-          updated: "2026-02-13"
+          desc: "Codex run done: 389 fixtures, 78 dead URLs. PDF extractor ready. Review output next.",
+          updated: "2026-02-17"
+        },
+        {
+          name: "Trading Engine",
+          status: "queued",
+          tag: "⏳ DATA COLLECTION",
+          desc: "Waiting on 2-3 weeks of Scout signal data before building copy trading execution layer. Revisit March.",
+          updated: "2026-02-18"
         }
       ],
       needsPlanning: [
         {
-          name: "Product Cross Tool",
+          name: "Camarie Photography",
           status: "queued",
-          desc: "Ground-up rebuild. Tiered architecture: L1 cache, L2 spec match, L3 LLM search.",
-          updated: "2026-02-12"
+          desc: "Email automation + SMS campaigns. Block 2 hrs.",
+          updated: "2026-02-17"
         }
       ],
       backBurner: [
@@ -528,50 +584,56 @@
           status: "queued",
           desc: "Index file built, paused.",
           updated: "2026-02-11"
-        },
-        {
-          name: "Memory Search / Embedding",
-          status: "queued",
-          desc: "Deferred — not enough history yet.",
-          updated: "2026-02-13"
         }
       ],
       completed: [
         {
-          name: "Signal Engine (VPS)",
+          name: "NOVA TGE / Airdrop",
           status: "live",
-          desc: "Headless Node.js signal generator. 14 strategies, Binance API, pm2 managed. Running 24/7 on VPS.",
-          updated: "2026-02-13"
+          desc: "855,211.5 veNOVA received (Supermassive veNFT). $0 cost basis. Portfolio up $860K since Oct 14.",
+          updated: "2026-02-17"
         },
         {
-          name: "Rook HQ (Pixel Office)",
+          name: "Signal Engine (VPS)",
           status: "live",
-          desc: "GBC-style pixel office with 4 agent characters. Built by Codex, walking system by Rook.",
-          updated: "2026-02-13"
+          desc: "Headless Node.js signal generator. Regime detection, ranging penalty, pm2 managed. PID 192281.",
+          updated: "2026-02-17"
+        },
+        {
+          name: "Crypto Intel System",
+          status: "live",
+          desc: "CoinGecko + DexScreener prices, xAI sentiment. 7 AM + 4 PM daily cron.",
+          updated: "2026-02-17"
+        },
+        {
+          name: "Portfolio Dashboard",
+          status: "live",
+          desc: "NOVA wired in with DexScreener live feed. Fuzzy blur on sensitive cards.",
+          updated: "2026-02-17"
+        },
+        {
+          name: "Local Backup System",
+          status: "live",
+          desc: "Laddered tiers (latest/3day/1week/2week/30day). Daily 3 AM via Task Scheduler.",
+          updated: "2026-02-17"
+        },
+        {
+          name: "GCS Versioning",
+          status: "live",
+          desc: "portor-sales-portal bucket: versioning ON, 90-day lifecycle prune.",
+          updated: "2026-02-17"
         },
         {
           name: "Netrunner v2 Command Center",
           status: "live",
-          desc: "AI ops dashboard. Built by Codex from Rook's spec. iOS home screen icon added.",
-          updated: "2026-02-13"
+          desc: "AI ops dashboard with nightly auto-refresh cron. iOS home screen icon.",
+          updated: "2026-02-18"
         },
         {
-          name: "Cloud Rook Brain Sync",
+          name: "Dunk Bootstrap",
           status: "live",
-          desc: "SSH push pipeline. Desktop Rook pushes memory/config to VPS directly.",
-          updated: "2026-02-13"
-        },
-        {
-          name: "Entry Fingerprint Dedup",
-          status: "live",
-          desc: "Stopped duplicate trade entries in Signal Desk.",
-          updated: "2026-02-13"
-        },
-        {
-          name: "Scalp Lab Deep Analysis",
-          status: "live",
-          desc: "157 trades analyzed. 47.8% WR, +$406.23, 2.69:1 R:R.",
-          updated: "2026-02-13"
+          desc: "VPS agent bootstrapped. Codeword 'Hedgewatch'. Memory SOP deployed.",
+          updated: "2026-02-16"
         },
         {
           name: "Portor Knowledge Base",
@@ -586,90 +648,96 @@
       {
         path: "MEMORY.md",
         size: 4800,
-        updated: "2026-02-13T16:06:00",
-        content: "# Long-term memory. Identity, hard rules, shortcuts, project status, role division, session management, Google Cloud coordination protocol."
+        updated: "2026-02-17T20:53:00",
+        content: "# Long-term memory. Identity, hard rules, shortcuts, crypto strategy, intel system, role division, session management, GCP coordination."
       },
       {
-        path: "memory/2026-02-11.md",
-        size: 3200,
-        updated: "2026-02-11T23:59:00",
-        content: "Day 1 — Named Rook. Set up SOUL.md, AGENTS.md, identity files. Built Portor knowledge base. First P&A queries. Desktop organized."
+        path: "memory/projects/projects.md",
+        size: 1555,
+        updated: "2026-02-16T15:39:00",
+        content: "Master project status list — active, high priority, queued, back burner."
       },
       {
-        path: "memory/2026-02-12.md",
-        size: 4100,
-        updated: "2026-02-12T23:59:00",
-        content: "Day 2 — Scalp analysis (168 trades), confidence rebalance, SL flip to widest, auto-export server, Scout created, GitHub auth, Cloud Rook deployed."
+        path: "memory/projects/crypto/black-nova-strategy.md",
+        size: 15591,
+        updated: "2026-02-16T22:24:00",
+        content: "BLACK/NOVA/40 Acres full strategy. 855K veNOVA airdrop, $0 cost basis, 2-year debt-free target, dual-chain yield."
       },
       {
-        path: "memory/2026-02-13.md",
-        size: 3474,
-        updated: "2026-02-13T17:18:00",
-        content: "Day 3 — Louisville dashboard: tier restructure, gen inheritance, pallet thresholds. Inventory Notes column. Netrunner v2 built by Codex. Cloud Rook: crash recovery, brain sync via SSH, session cleanup cron."
+        path: "memory/projects/portor/portor-knowledge-base.md",
+        size: 22901,
+        updated: "2026-02-11T14:21:00",
+        content: "487 products, 5 warehouses, 127 clearance items, 427 competitor crosses, all cloud function pipelines mapped."
       },
       {
-        path: "memory/2026-02-13-evening.md",
-        size: 1719,
-        updated: "2026-02-13T18:37:00",
-        content: "Evening — Cloud Rook brain sync, backup taken, crash recovery, Scout session cleanup cron, Louisville refinements."
-      },
-      {
-        path: "memory/2026-02-13-late.md",
-        size: 1798,
-        updated: "2026-02-13T20:32:00",
-        content: "Signal Engine built (9 files, zero deps, verified on Binance). Netrunner iOS icon. VPS = source of truth for trading data."
-      },
-      {
-        path: "memory/2026-02-13-night.md",
-        size: 3084,
-        updated: "2026-02-13T20:48:00",
-        content: "Signal Engine deployed to VPS via pm2. All 7 Codex findings fixed. Netrunner iOS icon pushed. Macro Knowledge Base started (42 Macro by Darius Dale). Auth = OAuth flat rate."
-      },
-      {
-        path: "memory/louisville-thresholds.md",
-        size: 1986,
+        path: "memory/projects/louisville/louisville-thresholds.md",
+        size: 2011,
         updated: "2026-02-13T17:02:00",
         content: "Louisville key thresholds, pallet quantities, rep-requested SKUs, tier system, threshold resolution order."
       },
       {
-        path: "memory/portor-cloud-reference.md",
-        size: 1989,
-        updated: "2026-02-13T16:50:00",
-        content: "GCP project details, live site URLs, cloud function triggers, deploy commands, branding reference. Sourced from Cloud Rook's CLAUDE.md."
+        path: "memory/projects/portor/cloud-reference/portor-cloud-reference.md",
+        size: 1997,
+        updated: "2026-02-13T16:51:00",
+        content: "GCP project details, live site URLs, cloud function triggers, deploy commands, branding reference."
       },
       {
-        path: "memory/cloud-rook-report-2026-02-13.md",
-        size: 1969,
-        updated: "2026-02-13T16:55:00",
-        content: "Cloud Rook's verified work: GCS service account, RHBE fixes, SKU gap analysis, staging URL. Incidents: production overwrite, max_tokens config error."
+        path: "memory/daily/2026-02/2026-02-17.md",
+        size: 10606,
+        updated: "2026-02-18T02:00:00",
+        content: "Day 7 — NOVA TGE complete, portfolio dashboard updated, security audit done, backup systems live, Pole Pricing rebuilt."
       },
       {
-        path: "memory/portor-knowledge-base.md",
-        size: 15000,
-        updated: "2026-02-11T22:00:00",
-        content: "487 products, 5 warehouses, 127 clearance items, 427 competitor crosses, all cloud function pipelines mapped."
+        path: "memory/daily/2026-02/2026-02-16.md",
+        size: 9179,
+        updated: "2026-02-17T18:46:00",
+        content: "Day 6 — NOVA airdrop snapshot, Dunk bootstrap, Signal Engine changelog (regime detection, ranging penalty)."
       },
       {
-        path: "memory/codex-scalp-strategy-audit.md",
-        size: 5500,
-        updated: "2026-02-13T10:00:00",
-        content: "Codex findings: opening candle skip, Kill Zone mismatch, CHOCH asymmetry, FVG fill rule, EMA R:R gate."
+        path: "memory/daily/2026-02/2026-02-14.md",
+        size: 9454,
+        updated: "2026-02-17T18:46:00",
+        content: "Day 4 — SuperNova playbook, crypto deep dives, investment framework established."
       },
       {
-        path: "memory/codex-lumenation-audit.md",
-        size: 3800,
-        updated: "2026-02-13T09:00:00",
-        content: "Codex audit of Lumenation Rep Hub codebase."
+        path: "memory/daily/2026-02/2026-02-13.md",
+        size: 3510,
+        updated: "2026-02-17T18:46:00",
+        content: "Day 3 — Louisville dashboard, Netrunner v2, Cloud Rook brain sync, Signal Engine deploy."
+      },
+      {
+        path: "memory/daily/2026-02/2026-02-12.md",
+        size: 3186,
+        updated: "2026-02-12T14:35:00",
+        content: "Day 2 — Scalp analysis, confidence rebalance, Scout created, GitHub auth, Cloud Rook deployed."
+      },
+      {
+        path: "memory/daily/2026-02/2026-02-11.md",
+        size: 2289,
+        updated: "2026-02-11T14:27:00",
+        content: "Day 1 — Named Rook. SOUL.md, AGENTS.md, Portor KB built, first P&A queries."
+      },
+      {
+        path: "memory/reference/lessons.md",
+        size: 732,
+        updated: "2026-02-12T16:51:00",
+        content: "Key lessons: present options before building, check native features before custom solutions."
+      },
+      {
+        path: "memory/tasks/2026-W07.md",
+        size: 2489,
+        updated: "2026-02-12T18:27:00",
+        content: "Week 7 task tracking."
       }
     ];
 
     const SYSTEM_HEALTH = {
-      desktopGateway: { label: "Desktop Gateway", status: "running", details: "Port 18789 · WSL2 · 5+ compactions today · Opus (OAuth flat rate)" },
-      cloudVPS: { label: "Cloud VPS", status: "online", details: "rook-247 · 138.197.64.68 · Signal Engine running (pm2) · poppler-utils installed" },
-      signalEngine: { label: "Signal Engine", status: "running", details: "pm2 managed · PID 83222 · 86MB RAM · Auto-restart on crash · Survives reboot" },
+      desktopGateway: { label: "Desktop Gateway", status: "running", details: "OpenClaw 2026.2.14 · Port 18789 · WSL2 · Opus · 0% context" },
+      cloudVPS: { label: "Cloud VPS (Dunk)", status: "online", details: "138.197.64.68 · Up 6d 10h · OpenClaw running (PID 194098) · 34ms ping" },
+      signalEngine: { label: "Signal Engine", status: "running", details: "pm2 managed · PID 192281 · 112MB RAM · 5 restarts · Auto-restart on crash" },
       gcloudAuth: { label: "gcloud Auth", status: "expired", details: "brandon@portorindustry.com — needs gcloud auth login" },
-      githubAuth: { label: "GitHub Auth", status: "active", details: "Windows credential-manager via WSL" },
-      anthropicAPI: { label: "Anthropic API", status: "active", details: "OAuth token (Max Pro) · claude-opus-4-6 · Flat rate — no per-token billing" },
+      githubAuth: { label: "GitHub Auth", status: "active", details: "Windows credential-manager via WSL · Netrunner repo: brancammedia/netrunner" },
+      anthropicAPI: { label: "Anthropic API", status: "active", details: "OAuth token · claude-opus-4-6 · Flat rate — no per-token billing" },
       deployment: { label: "Last GCS Deploy", status: "expired", details: "Blocked — gcloud auth expired" }
     };
 
@@ -835,6 +903,7 @@
         <article class="project-item">
           <div class="row">
             <strong>${escapeHtml(item.name)}</strong>
+            ${item.tag ? `<span class="badge" style="background:#b8860b;color:#fff;font-size:0.7em;margin-left:6px">${escapeHtml(item.tag)}</span>` : ""}
             <span class="badge ${escapeHtml(item.status)}">${escapeHtml(item.status)}</span>
           </div>
           <div class="subtle">${escapeHtml(item.desc)}</div>
