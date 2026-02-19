@@ -2144,9 +2144,18 @@ function kanbanDrop(e, col) {
   e.preventDefault();
   e.currentTarget.classList.remove('drag-over');
   const task = TASKS.find(t => t.id === dragTaskId);
-  if (task) { task.status = col; renderTasks(); }
+  if (task) { task.status = col; saveTaskState(); renderTasks(); }
   dragTaskId = null;
 }
+function saveTaskState() {
+  const state = TASKS.map(t => ({ id: t.id, status: t.status }));
+  localStorage.setItem('nr_tasks', JSON.stringify(state));
+}
+function loadTaskState() {
+  const saved = JSON.parse(localStorage.getItem('nr_tasks') || '[]');
+  saved.forEach(s => { const t = TASKS.find(t => t.id === s.id); if (t) t.status = s.status; });
+}
+loadTaskState();
 
 // ============================================================
 // RENDER: CALENDAR
