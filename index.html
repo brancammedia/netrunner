@@ -339,39 +339,40 @@
 
     const AGENTS = [
       {
-        id: "desktop-rook",
-        name: "Desktop Rook",
-        icon: "ROOK",
-        status: "online",
-        model: "claude-opus-4-6",
-        contextUsed: 41927,
-        contextMax: 200000,
-        lastActive: "2026-02-18T03:00:00",
-        host: "WIN-79G2697J611 (WSL2)"
-      },
-      {
-        id: "dunk",
-        name: "Dunk",
+        id: "rook",
+        name: "Rook ♜",
         icon: "ROOK",
         status: "online",
         model: "claude-opus-4-6",
         contextUsed: 0,
         contextMax: 200000,
-        lastActive: "2026-02-17T20:00:00",
+        lastActive: "2026-02-24T01:00:00",
         host: "rook-247 (138.197.64.68)",
-        uptime: "6 days 10h"
+        uptime: "24/7 VPS"
+      },
+      {
+        id: "dunk",
+        name: "Dunk ♞",
+        icon: "ROOK",
+        status: "standby",
+        model: "claude-opus-4-6",
+        contextUsed: 0,
+        contextMax: 200000,
+        lastActive: "2026-02-23T21:00:00",
+        host: "rook-247 (sub-agent)",
+        summary: "Memory backed up. Available as sub-agent for reviews & audits."
       },
       {
         id: "scout",
-        name: "Scout",
+        name: "Scout ♟️",
         icon: "SCOUT",
-        status: "idle",
-        model: "claude-opus-4-6",
-        contextUsed: 200000,
+        status: "online",
+        model: "claude-sonnet-4-6",
+        contextUsed: 0,
         contextMax: 200000,
-        lastRun: "2026-02-13T08:00:00",
-        nextRun: "2026-02-18T08:30:00",
-        summary: "Context full — awaiting session cleanup."
+        lastRun: "2026-02-24T05:00:00",
+        nextRun: "2026-02-24T17:00:00",
+        summary: "Data analyst. Runs 2x/day in Engine Optimization pipeline."
       },
       {
         id: "signal-engine",
@@ -381,9 +382,9 @@
         model: "Node.js (headless)",
         contextUsed: 0,
         contextMax: 0,
-        lastActive: "2026-02-18T03:00:00",
-        host: "rook-247 (pm2 · PID 192281)",
-        uptime: "Running 24/7"
+        lastActive: "2026-02-24T01:00:00",
+        host: "rook-247 (pm2)",
+        uptime: "Continuous"
       }
     ];
 
@@ -392,10 +393,10 @@
         label: "Desktop Rook DM",
         type: "DM",
         model: "claude-opus-4-6",
-        contextUsed: 41927,
+        contextUsed: 41933,
         contextMax: 200000,
-        cost: null,
-        lastMessage: "2026-02-18T02:56:00",
+        cost: 0.22,
+        lastMessage: "2026-02-23T02:01:00",
         channel: "Telegram"
       },
       {
@@ -404,18 +405,38 @@
         model: "claude-opus-4-6",
         contextUsed: 0,
         contextMax: 200000,
-        cost: null,
-        lastMessage: "2026-02-18T03:00:00",
+        cost: 0.00,
+        lastMessage: "2026-02-23T03:00:00",
         channel: "Cron"
       },
       {
-        label: "Scout — Daily Analysis",
-        type: "Sub-agent",
+        label: "Rook's Gambit",
+        type: "Cron",
         model: "claude-opus-4-6",
-        contextUsed: 200000,
+        contextUsed: 23181,
         contextMax: 200000,
-        cost: null,
-        lastMessage: "2026-02-13T08:02:00",
+        cost: 0.02,
+        lastMessage: "2026-02-22T07:30:00",
+        channel: "Cron"
+      },
+      {
+        label: "BTC Market Analysis",
+        type: "Cron",
+        model: "claude-opus-4-6",
+        contextUsed: 19758,
+        contextMax: 200000,
+        cost: 0.02,
+        lastMessage: "2026-02-22T07:00:00",
+        channel: "Cron"
+      },
+      {
+        label: "Portor Health Check",
+        type: "Cron",
+        model: "claude-opus-4-6",
+        contextUsed: 29683,
+        contextMax: 200000,
+        cost: 0.02,
+        lastMessage: "2026-02-19T15:30:00",
         channel: "Cron"
       },
       {
@@ -427,108 +448,176 @@
         cost: null,
         lastMessage: "2026-02-16T18:45:00",
         channel: "Telegram"
-      },
-      {
-        label: "Morning Briefing",
-        type: "Cron",
-        model: "claude-opus-4-6",
-        contextUsed: 42275,
-        contextMax: 200000,
-        cost: null,
-        lastMessage: "2026-02-12T07:00:00",
-        channel: "Telegram"
       }
     ];
 
     const CRON_JOBS = [
       {
-        name: "Morning Crypto Intel",
-        schedule: "Daily 7:00 AM CST",
+        name: "Engine Opt — AM Step 1: Data Analysis (Scout)",
+        schedule: "Daily 5:00 AM CT",
         enabled: true,
-        lastRun: "2026-02-17T07:00:00",
-        lastResult: "success",
-        nextFire: "2026-02-18T07:00:00"
+        lastRun: null,
+        lastResult: null,
+        nextFire: "2026-02-24T05:00:00"
       },
       {
-        name: "Pull Scout Report",
-        schedule: "Daily 8:30 AM CST",
+        name: "Engine Opt — AM Step 2: Propose Changes (Rook)",
+        schedule: "Daily 5:20 AM CT",
         enabled: true,
-        lastRun: "2026-02-17T08:30:00",
-        lastResult: "success",
-        nextFire: "2026-02-18T08:30:00"
+        lastRun: null,
+        lastResult: null,
+        nextFire: "2026-02-24T05:20:00"
       },
       {
-        name: "Afternoon Crypto Intel",
-        schedule: "Daily 4:00 PM CST",
+        name: "Engine Opt — AM Step 3: Review Proposal (Dunk)",
+        schedule: "Daily 5:40 AM CT",
         enabled: true,
-        lastRun: "2026-02-17T16:00:00",
-        lastResult: "success",
-        nextFire: "2026-02-18T16:00:00"
+        lastRun: null,
+        lastResult: null,
+        nextFire: "2026-02-24T05:40:00"
       },
       {
-        name: "Black Hole Voting Reminder",
-        schedule: "Wed 4:45 PM CST",
+        name: "Engine Opt — AM Step 4: Implement Changes (Rook)",
+        schedule: "Daily 6:00 AM CT",
         enabled: true,
-        lastRun: "2026-02-12T16:45:00",
-        lastResult: "success",
-        nextFire: "2026-02-19T16:45:00"
+        lastRun: null,
+        lastResult: null,
+        nextFire: "2026-02-24T06:00:00"
       },
       {
-        name: "Nightly Memory Save",
-        schedule: "Daily 2:00 AM CST",
+        name: "Engine Opt — AM Step 5: Code Audit (Dunk)",
+        schedule: "Daily 6:20 AM CT",
         enabled: true,
-        lastRun: "2026-02-18T02:00:00",
-        lastResult: "success",
-        nextFire: "2026-02-19T02:00:00"
+        lastRun: null,
+        lastResult: null,
+        nextFire: "2026-02-24T06:20:00"
       },
       {
-        name: "Netrunner Nightly Refresh",
-        schedule: "Daily 3:00 AM CST",
+        name: "Engine Opt — AM Step 6: Fix Audit Issues (Rook)",
+        schedule: "Daily 6:40 AM CT",
         enabled: true,
-        lastRun: "2026-02-18T03:00:00",
-        lastResult: "success",
-        nextFire: "2026-02-19T03:00:00"
+        lastRun: null,
+        lastResult: null,
+        nextFire: "2026-02-24T06:40:00"
       },
       {
-        name: "Elevate & UFO/Space Check",
-        schedule: "Mon 10:00 AM CST",
+        name: "Engine Opt — Morning Report",
+        schedule: "Daily 7:00 AM CT",
         enabled: true,
-        lastRun: "2026-02-17T10:00:00",
-        lastResult: "success",
-        nextFire: "2026-02-24T10:00:00"
+        lastRun: null,
+        lastResult: null,
+        nextFire: "2026-02-24T07:00:00"
       },
       {
-        name: "VPS Snapshot Collector",
-        schedule: "Every 4h (VPS cron)",
+        name: "Morning Briefing - Gosey",
+        schedule: "Daily 7:30 AM CT",
         enabled: true,
-        lastRun: "2026-02-18T02:00:00",
+        lastRun: "2026-02-23T07:30:00",
         lastResult: "success",
-        nextFire: "2026-02-18T04:00:00"
+        nextFire: "2026-02-24T07:30:00"
+      },
+      {
+        name: "Portor Health Check",
+        schedule: "Daily 7:30 AM CT",
+        enabled: true,
+        lastRun: "2026-02-23T13:30:00",
+        lastResult: "success",
+        nextFire: "2026-02-24T13:30:00"
+      },
+      {
+        name: "Engine Opt — PM Step 1: Data Analysis (Scout)",
+        schedule: "Daily 5:00 PM CT",
+        enabled: true,
+        lastRun: null,
+        lastResult: null,
+        nextFire: "2026-02-24T17:00:00"
+      },
+      {
+        name: "Engine Opt — PM Step 2: Propose Changes (Rook)",
+        schedule: "Daily 5:20 PM CT",
+        enabled: true,
+        lastRun: null,
+        lastResult: null,
+        nextFire: "2026-02-24T17:20:00"
+      },
+      {
+        name: "Engine Opt — PM Step 3: Review Proposal (Dunk)",
+        schedule: "Daily 5:40 PM CT",
+        enabled: true,
+        lastRun: null,
+        lastResult: null,
+        nextFire: "2026-02-24T17:40:00"
+      },
+      {
+        name: "Engine Opt — PM Step 4: Implement Changes (Rook)",
+        schedule: "Daily 6:00 PM CT",
+        enabled: true,
+        lastRun: null,
+        lastResult: null,
+        nextFire: "2026-02-24T18:00:00"
+      },
+      {
+        name: "Engine Opt — PM Step 5: Code Audit (Dunk)",
+        schedule: "Daily 6:20 PM CT",
+        enabled: true,
+        lastRun: null,
+        lastResult: null,
+        nextFire: "2026-02-24T18:20:00"
+      },
+      {
+        name: "Engine Opt — PM Step 6: Fix Audit Issues (Rook)",
+        schedule: "Daily 6:40 PM CT",
+        enabled: true,
+        lastRun: null,
+        lastResult: null,
+        nextFire: "2026-02-24T18:40:00"
+      },
+      {
+        name: "Session Cleanup",
+        schedule: "Every 6h",
+        enabled: true,
+        lastRun: "2026-02-23T18:00:00",
+        lastResult: "success",
+        nextFire: "2026-02-24T00:00:00"
       },
       {
         name: "Signal Engine (pm2)",
         schedule: "Continuous (VPS)",
         enabled: true,
-        lastRun: "2026-02-18T03:00:00",
+        lastRun: "2026-02-24T01:00:00",
         lastResult: "success",
         nextFire: null
+      },
+      {
+        name: "Inventory Refresh (Local)",
+        schedule: "Daily 7:45 AM ET (system cron)",
+        enabled: true,
+        lastRun: "2026-02-23T21:19:00",
+        lastResult: "success",
+        nextFire: "2026-02-24T12:45:00"
       }
     ];
 
     const PROJECTS = {
       active: [
         {
-          name: "Signal & Scalp Trading Bots",
+          name: "Signal Engine + Optimization Pipeline",
           status: "live",
-          tag: "⏳ DATA COLLECTION",
-          desc: "Live v2 running on VPS. Accumulating signal data — revisit for execution layer in March.",
-          updated: "2026-02-18"
+          tag: "🔄 AUTONOMOUS",
+          desc: "352-trade audit → 6 fixes deployed Feb 23. Autonomous 2x/day optimization pipeline: Scout→Rook→Dunk→Rook→Dunk→Rook. 7 profitable strategies, single-TF only.",
+          updated: "2026-02-23"
         },
         {
           name: "Portor Inventory Management",
-          status: "in-progress",
-          desc: "Flag low stock, prioritize by market importance. This week's #1 priority.",
-          updated: "2026-02-17"
+          status: "live",
+          desc: "Max Lumens column. 563 products. Local refresh cron 7:45 AM ET. Cloud function 7:30 AM EST.",
+          updated: "2026-02-23"
+        },
+        {
+          name: "Portor P&A Skill",
+          status: "live",
+          desc: "Pricing & Availability lookups via Telegram. SPA/PA formats. Paths updated to VPS.",
+          updated: "2026-02-23"
         },
         {
           name: "Generation Guide Tool",
@@ -537,10 +626,10 @@
           updated: "2026-02-13"
         },
         {
-          name: "Portor Marketing Video",
-          status: "in-progress",
-          desc: "Outsourced to Fiverr ($100). Temp portal at gs://portor-video-temp/.",
-          updated: "2026-02-17"
+          name: "Portfolio Dashboard",
+          status: "live",
+          desc: "Voting Yields section live. LP abandoned Feb 21 — pure voting yield. Burn decision Wed Feb 25.",
+          updated: "2026-02-22"
         }
       ],
       highPriority: [
@@ -553,23 +642,23 @@
         {
           name: "Portor Cross Tool",
           status: "in-progress",
-          desc: "Codex run done: 389 fixtures, 78 dead URLs. PDF extractor ready. Review output next.",
-          updated: "2026-02-17"
+          desc: "389 fixtures, 78 dead URLs. PDF extractor ready. Needs ground-up re-plan with AI backend.",
+          updated: "2026-02-19"
         },
         {
-          name: "Trading Engine",
+          name: "Automated Trading Bot",
           status: "queued",
           tag: "⏳ DATA COLLECTION",
-          desc: "Waiting on 2-3 weeks of Scout signal data before building copy trading execution layer. Revisit March.",
-          updated: "2026-02-18"
+          desc: "Waiting on optimization pipeline results before building copy trading execution layer.",
+          updated: "2026-02-23"
         }
       ],
       needsPlanning: [
         {
           name: "Camarie Photography",
           status: "queued",
-          desc: "Email automation + SMS campaigns. Block 2 hrs.",
-          updated: "2026-02-17"
+          desc: "Email automation + SMS campaigns.",
+          updated: "2026-02-22"
         }
       ],
       backBurner: [
@@ -588,34 +677,34 @@
       ],
       completed: [
         {
+          name: "VPS Migration",
+          status: "live",
+          desc: "Rook migrated from WSL2 → VPS (138.197.64.68). Single operator, 24/7. OpenClaw uninstalled from local.",
+          updated: "2026-02-23"
+        },
+        {
           name: "NOVA TGE / Airdrop",
           status: "live",
-          desc: "855,211.5 veNOVA received (Supermassive veNFT). $0 cost basis. Portfolio up $860K since Oct 14.",
-          updated: "2026-02-17"
+          desc: "855,211.5 veNOVA received. $0 cost basis. Pure voting yield play.",
+          updated: "2026-02-21"
         },
         {
-          name: "Signal Engine (VPS)",
+          name: "Portor Architecture Audit",
           status: "live",
-          desc: "Headless Node.js signal generator. Regime detection, ranging penalty, pm2 managed. PID 192281.",
-          updated: "2026-02-17"
+          desc: "4 cloud functions, 15 GCS folders, all data sources documented. Changelog protocol formalized.",
+          updated: "2026-02-23"
         },
         {
-          name: "Crypto Intel System",
+          name: "Portor Pricing Tool",
           status: "live",
-          desc: "CoinGecko + DexScreener prices, xAI sentiment. 7 AM + 4 PM daily cron.",
-          updated: "2026-02-17"
+          desc: "Max Lumens column. Deployed to GCS.",
+          updated: "2026-02-20"
         },
         {
-          name: "Portfolio Dashboard",
+          name: "Portor Pole Pricing (Distribution)",
           status: "live",
-          desc: "NOVA wired in with DexScreener live feed. Fuzzy blur on sensitive cards.",
-          updated: "2026-02-17"
-        },
-        {
-          name: "Local Backup System",
-          status: "live",
-          desc: "Laddered tiers (latest/3day/1week/2week/30day). Daily 3 AM via Task Scheduler.",
-          updated: "2026-02-17"
+          desc: "Cloned from Main, stripped 5% columns. Deployed to GCS.",
+          updated: "2026-02-19"
         },
         {
           name: "GCS Versioning",
@@ -626,19 +715,13 @@
         {
           name: "Netrunner v2 Command Center",
           status: "live",
-          desc: "AI ops dashboard with nightly auto-refresh cron. iOS home screen icon.",
-          updated: "2026-02-18"
-        },
-        {
-          name: "Dunk Bootstrap",
-          status: "live",
-          desc: "VPS agent bootstrapped. Codeword 'Hedgewatch'. Memory SOP deployed.",
-          updated: "2026-02-16"
+          desc: "AI ops dashboard. Hosted on GitHub Pages.",
+          updated: "2026-02-23"
         },
         {
           name: "Portor Knowledge Base",
           status: "live",
-          desc: "487 products, 5 warehouses, 127 clearance items, all cloud functions mapped.",
+          desc: "487 products, 5 warehouses, all cloud functions mapped.",
           updated: "2026-02-11"
         }
       ]
@@ -647,21 +730,21 @@
     const MEMORY_FILES = [
       {
         path: "MEMORY.md",
-        size: 4800,
-        updated: "2026-02-17T20:53:00",
+        size: 4301,
+        updated: "2026-02-21T15:03:00",
         content: "# Long-term memory. Identity, hard rules, shortcuts, crypto strategy, intel system, role division, session management, GCP coordination."
       },
       {
         path: "memory/projects/projects.md",
-        size: 1555,
-        updated: "2026-02-16T15:39:00",
+        size: 2290,
+        updated: "2026-02-18T16:34:00",
         content: "Master project status list — active, high priority, queued, back burner."
       },
       {
         path: "memory/projects/crypto/black-nova-strategy.md",
-        size: 15591,
-        updated: "2026-02-16T22:24:00",
-        content: "BLACK/NOVA/40 Acres full strategy. 855K veNOVA airdrop, $0 cost basis, 2-year debt-free target, dual-chain yield."
+        size: 15631,
+        updated: "2026-02-21T20:16:00",
+        content: "BLACK/NOVA strategy revised. LP abandoned Feb 21, pure voting yield play. Burn vs loan decision Wed Feb 25."
       },
       {
         path: "memory/projects/portor/portor-knowledge-base.md",
@@ -680,6 +763,36 @@
         size: 1997,
         updated: "2026-02-13T16:51:00",
         content: "GCP project details, live site URLs, cloud function triggers, deploy commands, branding reference."
+      },
+      {
+        path: "memory/daily/2026-02/2026-02-22.md",
+        size: 1724,
+        updated: "2026-02-23T02:00:00",
+        content: "Day 12 — NOVA -46% intraday, portfolio -76% from Oct. Scout: 52.8% WR, +0.51%. 4 pending recs. xAI sentiment still broken."
+      },
+      {
+        path: "memory/daily/2026-02/2026-02-21.md",
+        size: 956,
+        updated: "2026-02-21T20:16:00",
+        content: "Day 11 — LP abandoned, pure voting yield strategy, burn vs loan decision set for Wed Feb 25."
+      },
+      {
+        path: "memory/daily/2026-02/2026-02-20.md",
+        size: 3310,
+        updated: "2026-02-21T02:00:00",
+        content: "Day 10 — Lumen pipeline (291 SKUs), scalp.html Rec #1+#3, voting yields section, inventory+pricing Max Lumens columns, 'Log it' codeword, Fang Finance analysis."
+      },
+      {
+        path: "memory/daily/2026-02/2026-02-19.md",
+        size: 2514,
+        updated: "2026-02-20T02:00:00",
+        content: "Day 9 — NOVA LP exited, scout fixes, Pole Pricing Distribution deployed, Project SOP rolled out to all 18 dirs."
+      },
+      {
+        path: "memory/daily/2026-02/2026-02-18.md",
+        size: 7079,
+        updated: "2026-02-19T02:00:00",
+        content: "Day 8 — Scout report + 6 fixes, Netrunner glow v2, Louisville replenishment deployed, Pole Pricing specMap fix."
       },
       {
         path: "memory/daily/2026-02/2026-02-17.md",
@@ -724,17 +837,35 @@
         content: "Key lessons: present options before building, check native features before custom solutions."
       },
       {
+        path: "memory/tasks/2026-W08.md",
+        size: 1507,
+        updated: "2026-02-18T16:35:00",
+        content: "Week 8 task tracking."
+      },
+      {
         path: "memory/tasks/2026-W07.md",
         size: 2489,
         updated: "2026-02-12T18:27:00",
         content: "Week 7 task tracking."
+      },
+      {
+        path: "memory/cron-registry.md",
+        size: 1953,
+        updated: "2026-02-18T16:35:00",
+        content: "All scheduled cron jobs with IDs, schedules, and status."
+      },
+      {
+        path: "memory/decisions.md",
+        size: 2132,
+        updated: "2026-02-18T17:07:00",
+        content: "Dated decision log — Project SOP, Dunk ownership, model usage rules."
       }
     ];
 
     const SYSTEM_HEALTH = {
-      desktopGateway: { label: "Desktop Gateway", status: "running", details: "OpenClaw 2026.2.14 · Port 18789 · WSL2 · Opus · 0% context" },
-      cloudVPS: { label: "Cloud VPS (Dunk)", status: "online", details: "138.197.64.68 · Up 6d 10h · OpenClaw running (PID 194098) · 34ms ping" },
-      signalEngine: { label: "Signal Engine", status: "running", details: "pm2 managed · PID 192281 · 112MB RAM · 5 restarts · Auto-restart on crash" },
+      desktopGateway: { label: "Desktop Gateway", status: "running", details: "OpenClaw 2026.2.14 · Port 18789 · WSL2 · Opus · 21% context (main session)" },
+      cloudVPS: { label: "Cloud VPS (Dunk)", status: "online", details: "138.197.64.68 · Up 11d 11h · Load 0.08 · 2 users · SSH OK · Ping 32ms" },
+      signalEngine: { label: "Signal Engine", status: "running", details: "pm2 managed · PID 192281 · 112MB RAM · 5 restarts · 5d 8h uptime · Auto-restart on crash" },
       gcloudAuth: { label: "gcloud Auth", status: "expired", details: "brandon@portorindustry.com — needs gcloud auth login" },
       githubAuth: { label: "GitHub Auth", status: "active", details: "Windows credential-manager via WSL · Netrunner repo: brancammedia/netrunner" },
       anthropicAPI: { label: "Anthropic API", status: "active", details: "OAuth token · claude-opus-4-6 · Flat rate — no per-token billing" },

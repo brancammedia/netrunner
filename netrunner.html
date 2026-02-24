@@ -864,6 +864,94 @@ body {
 @media (max-width: 768px) {
   .kanban-board { grid-template-columns: 1fr; }
 }
+
+/* ♜ Glow Effects — Feb 19 (v2 — cranked up) */
+
+/* Card/panel glow */
+.card, .stat-card, .agent-card, .domain-card, .project-card, .skill-card, .team-card, .kanban-column, .file-viewer, .weekly-day {
+  box-shadow: 0 0 15px rgba(0,161,154,0.25), 0 0 40px rgba(0,161,154,0.1), inset 0 0 8px rgba(0,161,154,0.05);
+}
+.card:hover, .stat-card:hover, .agent-card:hover, .project-card:hover, .skill-card:hover, .team-card:hover, .kanban-column:hover, .file-viewer:hover, .weekly-day:hover {
+  box-shadow: 0 0 20px rgba(0,161,154,0.35), 0 0 50px rgba(0,161,154,0.15), inset 0 0 10px rgba(0,161,154,0.08);
+}
+
+/* Active domain card glow (brighter) */
+.domain-card.active {
+  box-shadow: 0 0 25px rgba(0,161,154,0.5), 0 0 60px rgba(0,161,154,0.2), inset 0 0 12px rgba(0,161,154,0.1);
+}
+
+/* Header/title text glow */
+.logo, .section-title, .domain-name, .card-title, .team-card-name, .agent-name {
+  text-shadow: 0 0 12px rgba(0,161,154,0.5), 0 0 30px rgba(0,161,154,0.2);
+}
+.stat-value {
+  text-shadow: 0 0 15px rgba(0,161,154,0.6), 0 0 35px rgba(0,161,154,0.25);
+}
+
+/* Hover glow on interactive elements */
+.btn, .task-add button, .filter-btn, .view-btn, .spawn-btn, .card-action-btn, .md-file-btn {
+  transition: all 0.3s ease;
+}
+.btn:hover, .task-add button:hover {
+  box-shadow: 0 0 20px rgba(0,161,154,0.5), 0 0 40px rgba(0,161,154,0.2);
+}
+.filter-btn:hover, .filter-btn.active {
+  box-shadow: 0 0 15px rgba(0,161,154,0.4), 0 0 30px rgba(0,161,154,0.15);
+}
+.spawn-btn:hover, .btn-ghost:hover, .md-file-btn:hover {
+  box-shadow: 0 0 15px rgba(0,161,154,0.35);
+}
+.card-action-btn:hover {
+  box-shadow: 0 0 22px rgba(0,161,154,0.5), 0 0 45px rgba(0,161,154,0.2);
+}
+
+/* Active tab glow */
+.nav-tab {
+  transition: all 0.3s ease;
+}
+.nav-tab.active {
+  text-shadow: 0 0 12px rgba(0,161,154,0.7), 0 0 25px rgba(0,161,154,0.3);
+  box-shadow: inset 0 -3px 15px rgba(0,161,154,0.3);
+}
+.nav-tab:hover {
+  box-shadow: inset 0 -2px 12px rgba(0,161,154,0.2);
+}
+.view-btn.active {
+  box-shadow: 0 0 15px rgba(0,161,154,0.5), 0 0 30px rgba(0,161,154,0.2);
+}
+
+/* Status indicator glow */
+.conn-dot.connected {
+  box-shadow: 0 0 10px rgba(5,150,105,0.8), 0 0 25px rgba(5,150,105,0.4);
+}
+.badge-live, .badge-online, .badge-eligible { box-shadow: 0 0 10px rgba(5,150,105,0.5), 0 0 25px rgba(5,150,105,0.2); }
+.badge-offline, .badge-blocked { box-shadow: 0 0 10px rgba(220,38,38,0.5), 0 0 25px rgba(220,38,38,0.2); }
+.badge-maintenance, .badge-planned { box-shadow: 0 0 10px rgba(217,119,6,0.45), 0 0 25px rgba(217,119,6,0.18); }
+.badge-building { box-shadow: 0 0 10px rgba(6,182,212,0.45), 0 0 25px rgba(6,182,212,0.18); }
+.badge-testing { box-shadow: 0 0 10px rgba(124,58,237,0.45), 0 0 25px rgba(124,58,237,0.18); }
+.badge-active, .badge-built { box-shadow: 0 0 10px rgba(59,130,246,0.45), 0 0 25px rgba(59,130,246,0.18); }
+.badge-concept { box-shadow: 0 0 10px rgba(236,72,153,0.45), 0 0 25px rgba(236,72,153,0.18); }
+
+/* Timeline dot glow */
+.timeline-dot.completed { box-shadow: 0 0 10px rgba(5,150,105,0.7), 0 0 20px rgba(5,150,105,0.3); }
+.timeline-dot.pending { box-shadow: 0 0 10px rgba(217,119,6,0.7), 0 0 20px rgba(217,119,6,0.3); }
+.timeline-dot.failed { box-shadow: 0 0 10px rgba(220,38,38,0.7), 0 0 20px rgba(220,38,38,0.3); }
+
+/* Today event border glow */
+.today-event.completed { box-shadow: 0 0 14px rgba(5,150,105,0.35), 0 0 30px rgba(5,150,105,0.12); }
+.today-event.pending { box-shadow: 0 0 14px rgba(217,119,6,0.35), 0 0 30px rgba(217,119,6,0.12); }
+.today-event.failed { box-shadow: 0 0 14px rgba(220,38,38,0.35), 0 0 30px rgba(220,38,38,0.12); }
+
+/* Kanban card hover glow */
+.kanban-card:hover {
+  box-shadow: 0 0 15px rgba(0,161,154,0.25), 0 0 35px rgba(0,161,154,0.1);
+}
+
+/* Progress bar glow */
+.progress-fill { box-shadow: 0 0 8px rgba(0,161,154,0.6), 0 0 20px rgba(0,161,154,0.25); }
+.progress-fill.warn { box-shadow: 0 0 8px rgba(217,119,6,0.6), 0 0 20px rgba(217,119,6,0.25); }
+.progress-fill.danger { box-shadow: 0 0 8px rgba(220,38,38,0.6), 0 0 20px rgba(220,38,38,0.25); }
+
 </style>
 </head>
 <body>
@@ -938,7 +1026,7 @@ const AGENTS = [
     host: 'WIN-79G2697J611 (WSL2)',
     version: '2026.2.14',
     status: 'online',
-    context: { used: 45000, max: 200000 },
+    context: { used: 155143, max: 200000 },
     mdFiles: ['SOUL.md','IDENTITY.md','AGENTS.md','USER.md','MEMORY.md','TOOLS.md','HEARTBEAT.md'],
   },
   {
@@ -949,8 +1037,8 @@ const AGENTS = [
     host: '138.197.64.68 (DigitalOcean)',
     version: 'unknown',
     status: 'online',
-    context: { used: 12000, max: 200000 },
-    extra: 'VPS — needs OpenClaw update',
+    context: { used: 0, max: 200000 },
+    extra: 'VPS — OpenClaw running (pid 194098), uptime 7d',
     mdFiles: ['SOUL.md','IDENTITY.md','MEMORY.md'],
   },
   {
@@ -1006,8 +1094,8 @@ const DOMAINS = [
         agents: ['desktop-rook', 'dunk', 'scout'],
         cronJobs: ['Pull Scout Report'],
         workflows: [
-          { name: 'Scout Daily Analysis', schedule: 'Daily 8:00 AM', agent: 'dunk', output: 'Trade report + recommendations', dependsOn: null, lastRun: 'Feb 15 8:00 AM', lastStatus: 'completed' },
-          { name: 'Pull Scout Report', schedule: 'Daily 8:30 AM', agent: 'desktop-rook', output: 'Local copy + Telegram summary', dependsOn: 'Scout Daily Analysis', lastRun: 'Feb 15 8:30 AM', lastStatus: 'completed' },
+          { name: 'Scout Daily Analysis', schedule: 'Daily 8:00 AM', agent: 'dunk', output: 'Trade report + recommendations', dependsOn: null, lastRun: 'Feb 14 8:00 AM', lastStatus: 'completed (disabled on Desktop, runs on VPS)' },
+          { name: 'Pull Scout Report', schedule: 'Daily 8:30 AM', agent: 'desktop-rook', output: 'Local copy + Telegram summary', dependsOn: 'Scout Daily Analysis', lastRun: 'Feb 18 8:30 AM', lastStatus: 'completed' },
         ],
         tasks: [
           { text: 'Build regime detection (ADX + EMA slope)', done: false, priority: 'high' },
@@ -1043,8 +1131,8 @@ const DOMAINS = [
         agents: ['desktop-rook'],
         cronJobs: ['Morning Crypto Intel', 'Afternoon Crypto Intel'],
         workflows: [
-          { name: 'Morning Intel', schedule: 'Daily 7:00 AM', agent: 'desktop-rook', output: 'Price report + Telegram summary', dependsOn: null, lastRun: 'Feb 15 7:00 AM', lastStatus: 'completed' },
-          { name: 'Afternoon Intel', schedule: 'Daily 4:00 PM', agent: 'desktop-rook', output: 'Price report + AM comparison', dependsOn: 'Morning Intel', lastRun: 'Feb 14 4:00 PM', lastStatus: 'completed' },
+          { name: 'Morning Intel', schedule: 'Daily 7:00 AM', agent: 'desktop-rook', output: 'Price report + Telegram summary', dependsOn: null, lastRun: 'Feb 18 7:00 AM', lastStatus: 'completed' },
+          { name: 'Afternoon Intel', schedule: 'Daily 4:00 PM', agent: 'desktop-rook', output: 'Price report + AM comparison', dependsOn: 'Morning Intel', lastRun: 'Feb 18 4:00 PM', lastStatus: 'completed' },
         ],
         tasks: [
           { text: 'Fix xAI sentiment API reliability', done: false, priority: 'med' },
@@ -1057,32 +1145,33 @@ const DOMAINS = [
       {
         id: 'black-nova',
         name: 'BLACK/NOVA Strategy',
-        status: 'building',
-        description: '3M veBLACK + SuperNova ETH expansion + 40 Acres lending strategy',
+        status: 'deployed',
+        description: '3M veBLACK + SuperNova LP LIVE (~$11.2K NOVA/USDC) + 40 Acres lending + Epoch 1 yields',
         agents: ['desktop-rook'],
         cronJobs: ['Black Hole Voting', 'Elevate & UFO Check'],
         workflows: [
-          { name: 'Black Hole Voting', schedule: 'Wed 4:45 PM', agent: 'desktop-rook', output: 'Telegram reminder', dependsOn: null, lastRun: 'Feb 12 4:45 PM', lastStatus: 'completed' },
-          { name: 'Elevate/UFO Check', schedule: 'Mon 10:00 AM', agent: 'desktop-rook', output: 'Project launch updates', dependsOn: null, lastRun: 'Feb 10 10:00 AM', lastStatus: 'completed' },
+          { name: 'Black Hole Voting', schedule: 'Wed 4:45 PM', agent: 'desktop-rook', output: 'Telegram reminder', dependsOn: null, lastRun: 'Feb 18 4:45 PM', lastStatus: 'completed' },
+          { name: 'Elevate/UFO Check', schedule: 'Mon 10:00 AM', agent: 'desktop-rook', output: 'Project launch updates', dependsOn: null, lastRun: 'Feb 17 10:00 AM', lastStatus: 'completed' },
         ],
         tasks: [
-          { text: 'Wait for NOVA distribution details', done: false, priority: 'high' },
+          { text: 'SuperNova LP deployed — harvest NOVA rewards frequently', done: true, priority: 'high' },
           { text: 'Monitor 40 Acres NOVA support', done: false },
+          { text: 'Epoch 1 voting done (80/20 NOVA/SUPER + CHAMP/USDT)', done: true },
         ],
-        notes: 'Existing loan: ~$30K on 1M veBLACK. $10-12K available on remaining 2M. Amended strategy: borrow against NOVA → LP → DCA into blue chips.',
-        lastUpdated: '2026-02-15',
+        notes: 'LP: ~$11.2K (6,700 NOVA + 5,650 USDC vAMM), earning ~227 NOVA/hr. Epoch 1 yields: BH $626, SN $365, 40A repay $394 = ~$1,385/epoch. veNOVA: 855K, Liquid NOVA: 1,085.',
+        lastUpdated: '2026-02-19',
       },
       {
         id: 'lp-education',
         name: 'LP Education',
         status: 'deployed',
-        description: 'Liquidity provisioning study guide for Blackhole/SuperNova',
+        description: 'Liquidity provisioning study guide — Brandon deployed first LP',
         agents: ['desktop-rook'],
         cronJobs: [],
         workflows: [],
-        tasks: [{ text: 'Brandon review guide', done: false }],
-        notes: 'Study guide at Crypto Home/lp-study-guide.md',
-        lastUpdated: '2026-02-13',
+        tasks: [{ text: 'Brandon review guide', done: true }],
+        notes: 'Complete — Brandon successfully deployed NOVA/USDC LP using the guide',
+        lastUpdated: '2026-02-19',
       }
     ]
   },
@@ -1113,19 +1202,22 @@ const DOMAINS = [
       {
         id: 'netrunner',
         name: 'Netrunner',
-        status: 'building',
-        description: 'AI Operations Command Center dashboard',
+        status: 'deployed',
+        description: 'AI Operations Command Center — Tasks, Calendar, Team tabs shipped',
         agents: ['desktop-rook'],
-        cronJobs: [],
-        workflows: [],
+        cronJobs: ['Netrunner Nightly Refresh'],
+        workflows: [
+          { name: 'Nightly Data Refresh', schedule: 'Daily 3:00 AM', agent: 'desktop-rook', output: 'Updated static data + Telegram summary', dependsOn: null, lastRun: 'Feb 19 3:00 AM', lastStatus: 'running' },
+        ],
         tasks: [
           { text: 'Workflows inside project cards', done: true, priority: 'high' },
           { text: 'Full Portor tool inventory', done: true },
           { text: 'Expanded status system', done: true },
+          { text: 'Tasks/Calendar/Team tabs', done: true },
           { text: 'Live API integration', done: false },
         ],
-        notes: 'v3 build — refinement pass',
-        lastUpdated: '2026-02-15',
+        notes: 'v3 deployed. Nightly refresh cron running (fixed timeout issue). Kanban drag-and-drop persists to localStorage.',
+        lastUpdated: '2026-02-19',
       },
       {
         id: 'llm-cost',
@@ -1254,16 +1346,15 @@ const WEEKLY_SPECIAL = {
 };
 
 const ACTIVITY_FEED = [
-  { time: '7:00 AM', text: 'Crypto Intel ran — morning briefing sent to Telegram' },
-  { time: '8:00 AM', text: 'Scout analysis initiated on VPS' },
-  { time: '8:30 AM', text: 'Scout report pulled — 3 recommendations pending review' },
-  { time: '10:15 AM', text: 'Netrunner v3 rebuild started' },
-  { time: '10:55 AM', text: 'RSI Divergence confidence bumped 66→69' },
-  { time: '11:30 AM', text: 'LP Study Guide marked complete' },
-  { time: '1:00 PM', text: 'Homepage concept reviewed — awaiting Brandon feedback' },
-  { time: '2:15 PM', text: 'xAI sentiment API timeout — investigating' },
-  { time: '3:00 PM', text: 'Memory files synced — 12 entries updated' },
-  { time: '4:00 PM', text: 'Afternoon Crypto Intel scheduled' },
+  { time: '2:00 AM', text: 'Nightly Memory Save — BOOTSTRAP.md + daily log updated' },
+  { time: '3:00 AM', text: 'Netrunner Nightly Refresh — running data update' },
+  { time: '7:00 AM', text: 'Morning Crypto Intel — prices sent to Telegram' },
+  { time: '7:00 AM', text: 'BTC Market Analysis — first run scheduled' },
+  { time: '7:30 AM', text: "Rook's Gambit — daily briefing sent" },
+  { time: '7:30 AM', text: 'Portor Health Check — first run scheduled' },
+  { time: '8:30 AM', text: 'Scout report pulled from VPS' },
+  { time: '4:00 PM', text: 'Afternoon Crypto Intel — price comparison sent' },
+  { time: '4:45 PM', text: 'Black Hole Voting reminder sent (Wed)' },
 ];
 
 const CONFIG_FILES = [
@@ -1276,12 +1367,16 @@ const CONFIG_FILES = [
 ];
 
 const MEMORY_FILES = [
-  { name: 'MEMORY.md', size: '4.2 KB', modified: '2026-02-15', preview: 'Core memory store for Rook operations...' },
-  { name: 'memory/trading-decisions.md', size: '2.1 KB', modified: '2026-02-15', preview: 'Signal engine parameter changes and rationale...' },
-  { name: 'memory/project-status.md', size: '1.8 KB', modified: '2026-02-14', preview: 'Current status of all active projects...' },
-  { name: 'memory/brandon-preferences.md', size: '1.2 KB', modified: '2026-02-13', preview: 'Communication preferences and workflow...' },
-  { name: 'session-summaries/2026-02-15.md', size: '3.4 KB', modified: '2026-02-15', preview: 'Session: Netrunner v3 build, signal tuning...' },
-  { name: 'session-summaries/2026-02-14.md', size: '2.8 KB', modified: '2026-02-14', preview: 'Session: BLACK/NOVA strategy update...' },
+  { name: 'MEMORY.md', size: '4.8 KB', modified: '2026-02-18', preview: 'Master reference — agents, crypto, projects, infrastructure' },
+  { name: 'memory/projects/projects.md', size: '2.3 KB', modified: '2026-02-18', preview: 'Master project list with priorities and status' },
+  { name: 'memory/decisions.md', size: '2.1 KB', modified: '2026-02-18', preview: 'Dated decision log with rationale' },
+  { name: 'memory/cron-registry.md', size: '2.0 KB', modified: '2026-02-18', preview: 'All scheduled jobs with IDs and status' },
+  { name: 'memory/tasks/2026-W08.md', size: '1.5 KB', modified: '2026-02-18', preview: 'Current week task tracking' },
+  { name: 'memory/projects/crypto/black-nova/black-nova-strategy.md', size: '15.9 KB', modified: '2026-02-18', preview: 'BLACK/NOVA/SuperNova investment strategy' },
+  { name: 'memory/projects/portor/portor-knowledge-base.md', size: '22.9 KB', modified: '2026-02-11', preview: 'Portor product and operations knowledge base' },
+  { name: 'memory/daily/2026-02/2026-02-18.md', size: '7.1 KB', modified: '2026-02-19', preview: 'Daily log — Feb 18 decisions and changes' },
+  { name: 'memory/daily/2026-02/2026-02-17.md', size: '10.6 KB', modified: '2026-02-18', preview: 'Daily log — Feb 17 session notes' },
+  { name: 'memory/reference/lessons.md', size: '0.7 KB', modified: '2026-02-12', preview: 'Operational lessons learned' },
 ];
 
 // ============================================================
@@ -1341,23 +1436,23 @@ const TASKS = [
 ];
 
 const CRON_SCHEDULE = [
-  { name: 'Morning Crypto Intel', time: '07:00', days: 'daily', color: 'var(--teal)', colorDim: 'var(--teal-glow)', lastOk: true },
-  { name: 'BTC Market Analysis', time: '07:00', days: 'daily', color: 'var(--blue)', colorDim: 'var(--blue-dim)', lastOk: true },
-  { name: "Rook's Gambit Briefing", time: '07:30', days: 'daily', color: 'var(--purple)', colorDim: 'var(--purple-dim)', lastOk: true },
-  { name: 'Portor Health Check', time: '07:30', days: 'daily', color: 'var(--green)', colorDim: 'var(--green-dim)', lastOk: true },
-  { name: 'Pull Scout Report', time: '08:30', days: 'daily', color: 'var(--cyan)', colorDim: 'var(--cyan-dim)', lastOk: true },
-  { name: 'Afternoon Crypto Intel', time: '16:00', days: 'daily', color: 'var(--teal)', colorDim: 'var(--teal-glow)', lastOk: true },
-  { name: 'Black Hole Voting', time: '16:45', days: [3], color: 'var(--amber)', colorDim: 'var(--amber-dim)', lastOk: true },
-  { name: 'Elevate & UFO Check', time: '10:00', days: [1], color: 'var(--pink)', colorDim: 'var(--pink-dim)', lastOk: true },
-  { name: 'Weekly System Review', time: '15:00', days: [5], color: 'var(--purple)', colorDim: 'var(--purple-dim)', lastOk: true },
-  { name: 'Nightly Memory Save', time: '02:00', days: 'daily', color: 'var(--slate)', colorDim: 'var(--slate-dim)', lastOk: true },
-  { name: 'Netrunner Nightly Refresh', time: '03:00', days: 'daily', color: 'var(--red)', colorDim: 'var(--red-dim)', lastOk: false },
+  { name: 'Morning Crypto Intel', time: '07:00', days: 'daily', color: 'var(--teal)', colorDim: 'var(--teal-glow)', lastOk: true, lastRun: '2026-02-18 07:00' },
+  { name: 'BTC Market Analysis', time: '07:00', days: 'daily', color: 'var(--blue)', colorDim: 'var(--blue-dim)', lastOk: true, lastRun: 'never (new)' },
+  { name: "Rook's Gambit Briefing", time: '07:30', days: 'daily', color: 'var(--purple)', colorDim: 'var(--purple-dim)', lastOk: true, lastRun: '2026-02-18 07:30' },
+  { name: 'Portor Health Check', time: '07:30', days: 'daily', color: 'var(--green)', colorDim: 'var(--green-dim)', lastOk: true, lastRun: 'never (new)' },
+  { name: 'Pull Scout Report', time: '08:30', days: 'daily', color: 'var(--cyan)', colorDim: 'var(--cyan-dim)', lastOk: true, lastRun: '2026-02-18 08:30' },
+  { name: 'Afternoon Crypto Intel', time: '16:00', days: 'daily', color: 'var(--teal)', colorDim: 'var(--teal-glow)', lastOk: true, lastRun: '2026-02-18 16:00' },
+  { name: 'Black Hole Voting', time: '16:45', days: [3], color: 'var(--amber)', colorDim: 'var(--amber-dim)', lastOk: true, lastRun: '2026-02-18 16:45' },
+  { name: 'Elevate & UFO Check', time: '10:00', days: [1], color: 'var(--pink)', colorDim: 'var(--pink-dim)', lastOk: true, lastRun: '2026-02-17 10:00' },
+  { name: 'Weekly System Review', time: '15:00', days: [5], color: 'var(--purple)', colorDim: 'var(--purple-dim)', lastOk: true, lastRun: 'never (new)' },
+  { name: 'Nightly Memory Save', time: '02:00', days: 'daily', color: 'var(--slate)', colorDim: 'var(--slate-dim)', lastOk: true, lastRun: '2026-02-19 02:00' },
+  { name: 'Netrunner Nightly Refresh', time: '03:00', days: 'daily', color: 'var(--red)', colorDim: 'var(--red-dim)', lastOk: false, lastRun: '2026-02-18 03:00 (error)' },
 ];
 
 const TEAM = [
-  { name: 'Rook', icon: '♜', title: 'Chief Operator', host: 'WSL2 Desktop', status: 'online', role: 'Interactive work, GCP deployments, project management', core: true, currentTask: 'Netrunner v3 build', lastActive: 'Now' },
-  { name: 'Dunk', icon: '♞', title: 'Field Agent', host: 'VPS 138.197.64.68', status: 'online', role: '24/7 monitoring, scheduled tasks, weather', core: true, currentTask: 'Cron execution', lastActive: 'Now' },
-  { name: 'Scout', icon: '♟️', title: 'Trading Analyst', host: 'VPS', status: 'active', role: 'Daily 8 AM trading analysis, signal generation', core: true, currentTask: null, lastActive: '8:30 AM today' },
+  { name: 'Rook', icon: '♜', title: 'Chief Operator', host: 'WSL2 Desktop', status: 'online', role: 'Interactive work, GCP deployments, project management', core: true, currentTask: 'Nightly data refresh', lastActive: 'Now' },
+  { name: 'Dunk', icon: '♞', title: 'Field Agent', host: 'VPS 138.197.64.68', status: 'online', role: '24/7 monitoring, scheduled tasks, signal engine', core: true, currentTask: 'Signal Engine running (pm2)', lastActive: 'Now' },
+  { name: 'Scout', icon: '♟️', title: 'Trading Analyst', host: 'VPS (disabled on Desktop)', status: 'idle', role: 'Daily 8 AM trading analysis, signal generation', core: true, currentTask: null, lastActive: '2026-02-14 08:00' },
   { name: 'Builder', icon: '🔨', title: 'Developer', host: null, status: 'idle', role: 'Codex/coding tasks, script creation, tool builds', core: false, currentTask: null, lastActive: '2026-02-17' },
   { name: 'Researcher', icon: '🔍', title: 'Analyst', host: null, status: 'idle', role: 'Web scraping, data analysis, competitive intel', core: false, currentTask: null, lastActive: '2026-02-15' },
   { name: 'Writer', icon: '✍️', title: 'Content', host: null, status: 'idle', role: 'Reports, briefings, documentation, communications', core: false, currentTask: null, lastActive: '2026-02-16' },
